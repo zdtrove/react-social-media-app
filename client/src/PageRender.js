@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import NotFound from './components/NotFound'
 
 const generatePage = pageName => {
-	const component = () => require(`./pages/${pageName.trim().replace(/^\w/, (c) => c.toUpperCase())}`).default
+	const component = () => require(`./pages/${pageName}`).default
 	try {
 		return React.createElement(component())
 	} catch (err) {

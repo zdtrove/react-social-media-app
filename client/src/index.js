@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './_index.scss';
+import './styles.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import DataProvider from './redux/configureStore';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <DataProvider>
+      <App />
+    </DataProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
