@@ -9,18 +9,18 @@ const Register = () => {
 	const initialState = {
 		fullname: '',
 		username: '',
-		email: '', 
+		email: '',
 		password: '',
 		cf_password: '',
 		gender: 'male'
 	}
 	const [userData, setUserData] = useState(initialState)
-	const { 
+	const {
 		fullname,
 		username,
-		email, 
+		email,
 		password,
-		cf_password 
+		cf_password
 	} = userData
 	const [typePass, setTypePass] = useState(false)
 	const [typeCfPass, setTypeCfPass] = useState(false)
@@ -29,7 +29,7 @@ const Register = () => {
 	useEffect(() => {
 		if (auth.token) history.push('/')
 	}, [auth.token, history])
-	
+
 
 	const handleChangeInput = e => {
 		const { name, value } = e.target
@@ -44,7 +44,7 @@ const Register = () => {
 	return (
 		<div className="auth-page">
 			<form onSubmit={handleSubmit}>
-				<h3 className="mb-4 text-center text-uppercase">React Social Media App</h3>
+				<h3 className="mb-4 text-center text-uppercase">Social Media App</h3>
 				<div className="form-group">
 					<label htmlFor="fullname">Full Name</label>
 					<input
@@ -133,7 +133,7 @@ const Register = () => {
 						{alert.cf_password ? alert.cf_password : ''}
 					</small>
 				</div>
-				<div className="row justify-content-between mx-0 mb-1">
+				<div className="mx-0 mb-1 row justify-content-between">
 					<label htmlFor="male">
 						Male: <input type="radio" id="male" name="gender" value="male" defaultChecked onChange={handleChangeInput} />
 					</label>

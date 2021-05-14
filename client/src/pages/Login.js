@@ -1,14 +1,20 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import { login } from '../redux/actions/authAction'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Login = () => {
+	const { auth } = useSelector(state => state)
 	const initialState = { email: '', password: '' }
 	const [userData, setUserData] = useState(initialState)
 	const { email, password } = userData
 	const [typePass, setTypePass] = useState(false)
 	const dispatch = useDispatch()
+	const history = useHistory()
+
+	useEffect(() => {
+		if (auth.token) history.push('/')
+	}, [auth.token, history])
 
 	const handleChangeInput = e => {
 		const { name, value } = e.target
@@ -23,7 +29,7 @@ const Login = () => {
 	return (
 		<div className="auth-page">
 			<form onSubmit={handleSubmit}>
-				<h3 className="mb-4 text-center text-uppercase">React Social Media App</h3>
+				<h3 className="mb-4 text-center text-uppercase">Social Media App</h3>
 				<div className="form-group">
 					<label htmlFor="exampleInputEmail1">Email address</label>
 					<input
