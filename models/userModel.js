@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     avatar: {
         type: String,
-        default: 'https://res.cloudinary.com/dj7zmqrth/image/upload/v1620869046/avatar_eoglzj.jpg'
+        default: 'https://res.cloudinary.com/dj7zmqrth/image/upload/v1621141604/test/lb4xpsqhezdgtg9o2flp.png'
     },
     role: { type: String, default: 'user' },
     gender: { type: String, defaul: 'male' },
