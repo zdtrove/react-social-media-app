@@ -34,7 +34,7 @@ const Info = () => {
 								? <button onClick={() => setOnEdit(true)} className="btn btn-outline-info">
 									Edit Profile
 								</button>
-								: <FollowBtn />
+								: <FollowBtn user={user} />
 							}
 						</div>
 						<div className="info-content__followBtn">
