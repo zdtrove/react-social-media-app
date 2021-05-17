@@ -14,14 +14,14 @@ const Alert = () => {
             {alert.error &&
                 <Toast
                     msg={{ title: 'Error', body: alert.error }}
-                    handleShow={() => dispatch({type: GLOBAL_TYPES.ALERT, payload: {}})}
+                    handleShow={() => dispatch({ type: GLOBAL_TYPES.ALERT, payload: {} })}
                     bgColor="bg-danger"
                 />
             }
             {alert.success &&
                 <Toast
                     msg={{ title: 'Success', body: alert.success }}
-                    handleShow={() => dispatch({type: GLOBAL_TYPES.ALERT, payload: {}})}
+                    handleShow={() => dispatch({ type: GLOBAL_TYPES.ALERT, payload: {} })}
                     bgColor="bg-success"
                 />
             }

@@ -36,8 +36,8 @@ const Search = () => {
 			setUsers(res.data.users)
 			setLoad(false)
 		} catch (err) {
-			dispatch({ 
-				type: GLOBAL_TYPES.ALERT, 
+			dispatch({
+				type: GLOBAL_TYPES.ALERT,
 				payload: { error: err.response.data.msg }
 			})
 		}
@@ -51,19 +51,20 @@ const Search = () => {
 	return (
 		<form onSubmit={handleSearch} className="search-form">
 			<input
-				type="text" 
+				type="text"
 				name="search"
 				id="search"
 				value={search}
 				onChange={e => setSearch(e.target.value.toLowerCase().replace(/ /g, ''))}
+				title="Enter to Search"
 			/>
-			<div className="search-icon" style={{ opacity: search ? 0: 0.3 }}>
+			<div className="search-icon" style={{ opacity: search ? 0 : 0.3 }}>
 				<span className="material-icons">search</span>
-				<span>Search</span>
+				<span>Enter to Search</span>
 			</div>
 			<div
 				onClick={handleClose}
-				style={{ opacity: users.length === 0 ? 0 : 1}} 
+				style={{ opacity: users.length === 0 ? 0 : 1 }}
 				className="close-search"
 			>
 				&times;
@@ -74,7 +75,7 @@ const Search = () => {
 				{search && users.map(user => (
 					<UserCard
 						key={user._id}
-						user={user} 
+						user={user}
 						border="border"
 						handleClose={handleClose}
 					/>

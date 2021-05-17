@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Avatar from '../Avatar'
 import { getProfileUsers } from '../../redux/actions/profileAction'
 import EditProfile from './EditProfile'
+import FollowBtn from '../FollowBtn'
 
 const Info = () => {
 	const { id } = useParams()
@@ -15,7 +16,7 @@ const Info = () => {
 		if (id === auth.user._id) {
 			setUserData([auth.user])
 		} else {
-			dispatch(getProfileUsers({ users: profile.users, id, auth}))
+			dispatch(getProfileUsers({ users: profile.users, id, auth }))
 			const newData = profile.users.filter(user => user._id === id)
 			setUserData(newData)
 		}
@@ -28,10 +29,13 @@ const Info = () => {
 					<Avatar src={user.avatar} size="supper" />
 					<div className="info-content">
 						<div className="info-content__title">
-							<h2>{user.username} {user.mobile}</h2>
-							<button onClick={() => setOnEdit(true)} className="btn btn-outline-info">
-								Edit Profile
-							</button>
+							<h2>{user.username}</h2>
+							{user._id === auth.user._id
+								? <button onClick={() => setOnEdit(true)} className="btn btn-outline-info">
+									Edit Profile
+								</button>
+								: <FollowBtn />
+							}
 						</div>
 						<div className="info-content__followBtn">
 							<span className="mr-4">
@@ -41,15 +45,15 @@ const Info = () => {
 								{user.following.length} Following
 							</span>
 						</div>
-						<h6>{user.fullname}</h6>
+						<h6>{user.fullname} <span className="text-danger">{user.mobile}</span></h6>
 						<p className="m-0">{user.address}</p>
-						<h6>{user.email}</h6>
+						<h6 className="m-0">{user.email}</h6>
 						<a rel="noreferrer" href={user.website} target="_blank">
 							{user.website}
 						</a>
 						<p>{user.story}</p>
 					</div>
-					{onEdit && <EditProfile user={user} setOnEdit={setOnEdit} />}
+					{onEdit && <EditProfile setOnEdit={setOnEdit} />}
 				</div>
 			))}
 		</div>

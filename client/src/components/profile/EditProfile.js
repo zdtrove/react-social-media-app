@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { checkImage } from '../../utils/imageUpload'
+import { GLOBAL_TYPES } from '../../redux/actions/globalTypes'
+import { updateProfileUser } from '../../redux/actions/profileAction'
 
-const EditProfile = ({ user, setOnEdit }) => {
+const EditProfile = ({ setOnEdit }) => {
 	const initialState = {
 		fullname: '', mobile: '', address: '', website: '', story: '', gender: ''
 	}
@@ -9,12 +12,29 @@ const EditProfile = ({ user, setOnEdit }) => {
 	const { fullname, mobile, address, website, story, gender } = userData
 	const [avatar, setAvatar] = useState('')
 	const { auth, theme } = useSelector(state => state)
-	const changeAvatar = () => {
+	const dispatch = useDispatch()
 
+	useEffect(() => {
+		setUserData(auth.user)
+	}, [auth.user])
+
+	const changeAvatar = e => {
+		const file = e.target.files[0]
+		const err = checkImage(file)
+		if (err) return dispatch({
+			type: GLOBAL_TYPES.ALERT,
+			payload: { error: err }
+		})
+		setAvatar(file)
 	}
 	const handleInput = e => {
 		const { name, value } = e.target
 		setUserData({ ...userData, [name]: value })
+	}
+
+	const handleSubmit = e => {
+		e.preventDefault();
+		dispatch(updateProfileUser({ userData, avatar, auth }))
 	}
 
 	return (
@@ -22,20 +42,20 @@ const EditProfile = ({ user, setOnEdit }) => {
 			<button onClick={() => setOnEdit(false)} className="btn btn-danger btn-close">
 				Close
 			</button>
-			<form>
+			<form onSubmit={handleSubmit}>
 				<div className="info-avatar">
-					<img 
-						src={avatar ? URL.createObjectURL(avatar) : auth.user.avatar} 
+					<img
+						src={avatar ? URL.createObjectURL(avatar) : auth.user.avatar}
 						alt="avatar"
-						style={{ filter: theme ? 'invert(1)' : 'invert(0)'}}
+						style={{ filter: theme ? 'invert(1)' : 'invert(0)' }}
 					/>
 					<span>
 						<i className="fas fa-camera" />
 						<p>Change</p>
-						<input 
-							type="file" 
-							name="file" 
-							id="file-up" 
+						<input
+							type="file"
+							name="file"
+							id="file-up"
 							accept="image/*"
 							onChange={changeAvatar}
 						/>
@@ -65,13 +85,13 @@ const EditProfile = ({ user, setOnEdit }) => {
 				<div className="form-group">
 					<label htmlFor="story">Story</label>
 					<textarea cols="30" rows="4" value={story} onChange={handleInput} name="story" className="form-control" />
-					<small style={{ transform: 'translate(-5px, -25px)' }} className="text-danger d-block text-right">
+					<small style={{ transform: 'translate(-5px, -25px)' }} className="text-right text-danger d-block">
 						{story.length}/200
 					</small>
 				</div>
 				<label htmlFor="gender">Gender</label>
-				<div className="input-group-prepend px-0 mb-4">
-					<select onChange={handleInput} name="gender" id="gender" className="custom-select text-capitalize">
+				<div className="px-0 mb-4 input-group-prepend">
+					<select value={gender} onChange={handleInput} name="gender" id="gender" className="custom-select text-capitalize">
 						<option value="male">Male</option>
 						<option value="female">Female</option>
 						<option value="other">Other</option>
