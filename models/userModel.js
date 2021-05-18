@@ -25,9 +25,9 @@ const userSchema = new mongoose.Schema({
         default: 'https://res.cloudinary.com/dj7zmqrth/image/upload/v1621141604/test/lb4xpsqhezdgtg9o2flp.png'
     },
     role: { type: String, default: 'user' },
-    gender: { type: String, defaul: 'male' },
-    mobile: { type: String, defaul: '' },
-    address: { type: String, defaul: '' },
+    gender: { type: String, default: 'male' },
+    mobile: { type: String, default: '' },
+    address: { type: String, default: '' },
     story: {
         type: String,
         default: '',

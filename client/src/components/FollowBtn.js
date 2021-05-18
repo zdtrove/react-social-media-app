@@ -6,6 +6,7 @@ const FollowBtn = ({ user }) => {
 	const [followed, setFollowed] = useState(false)
 	const { auth, profile } = useSelector(state => state)
 	const dispatch = useDispatch()
+	const [load, setLoad] = useState(false)
 
 	useEffect(() => {
 		if (auth.user.following.find(item => item._id === user._id)) {
@@ -13,28 +14,34 @@ const FollowBtn = ({ user }) => {
 		}
 	}, [auth.user.following, user._id])
 
-	const hanldeFollow = () => {
+	const hanldeFollow = async () => {
+		if (load) return;
 		setFollowed(true)
-		dispatch(follow({ users: profile.users, user, auth }))
+		setLoad(true)
+		await dispatch(follow({ users: profile.users, user, auth }))
+		setLoad(false)
 	}
 
-	const handleUnfollow = () => {
+	const handleUnfollow = async () => {
+		if (load) return;
 		setFollowed(false)
-		dispatch(unfollow({ users: profile.users, user, auth }))
+		setLoad(true)
+		await dispatch(unfollow({ users: profile.users, user, auth }))
+		setLoad(false)
 	}
 
-    return (
-        <>
-        	{followed
-	        	? <button onClick={handleUnfollow} className="btn btn-outline-danger">
-	        		Unfollow
+	return (
+		<>
+			{followed
+				? <button onClick={handleUnfollow} className="btn btn-outline-danger">
+					Unfollow
 	        	</button>
-	        	: <button onClick={hanldeFollow} className="btn btn-outline-info">
-	        		Follow
+				: <button onClick={hanldeFollow} className="btn btn-outline-info">
+					Follow
 	        	</button>
-        	}
-        </>
-    )
+			}
+		</>
+	)
 }
 
 export default FollowBtn
