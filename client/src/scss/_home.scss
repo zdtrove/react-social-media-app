@@ -20,8 +20,8 @@
 
 .posts {
   .card {
-    box-shadow: 0 0 10px #111;
-    .card-header {
+    box-shadow: 0 0 4px #ddd;
+    .cardHeader {
       display: flex;
       justify-content: space-between;
       align-item: center;
@@ -38,6 +38,35 @@
       .dropdown-item {
         display: flex;
         margin: 5px 0;
+      }
+    }
+    .cardBody {
+      &__content {
+        padding: 0 25px;
+        margin-top: -10px;
+        margin-bottom: 10px;
+        .readMore {
+          color: crimson;
+          cursor: pointer;
+        }
+      }
+    }
+    .cardFooter {
+      .card-icon-menu {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 15px;
+        cursor: pointer;
+        i {
+          font-size: 28px;
+          margin: 10px;
+        }
+        img {
+          width: 28px;
+          height: 28px;
+          transform: translate(5px, -5px);
+          opacity: 0.9;
+        }
       }
     }
   }

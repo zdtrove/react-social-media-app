@@ -56,7 +56,7 @@ const StatusModal = () => {
         refCanvas.current.setAttribute("height", height)
         const ctx = refCanvas.current.getContext('2d')
         ctx.drawImage(videoRef.current, 0, 0, width, height)
-        let URL = refCanvas.canvas.current.toDataURL()
+        let URL = refCanvas.current.toDataURL()
         setImages([...images, { camera: URL }])
     }
 

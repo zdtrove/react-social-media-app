@@ -6,8 +6,13 @@ import { useSelector } from 'react-redux'
 
 const CardHeader = ({ post }) => {
     const { auth } = useSelector(state => state)
+
+    const handleEditPost = () => {
+        console.log(post)
+    }
+
     return (
-        <div className="card-header">
+        <div className="cardHeader">
             <div className="d-flex">
                 <Avatar src={post.user.avatar} size="big" />
                 <div className="card-name">
@@ -28,7 +33,7 @@ const CardHeader = ({ post }) => {
                 <div className="dropdown-menu">
                     {auth.user._id === post.user._id &&
                         <>
-                            <div className="dropdown-item">
+                            <div className="dropdown-item" onClick={handleEditPost}>
                                 <span className="material-icons">create</span> Edit Post
                             </div>
                             <div className="dropdown-item">
