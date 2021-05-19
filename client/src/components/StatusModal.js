@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { GLOBAL_TYPES } from '../redux/actions/globalTypes'
+import { createPost } from '../redux/actions/postAction'
 
 const StatusModal = () => {
     const { auth, theme } = useSelector(state => state)
@@ -8,9 +9,10 @@ const StatusModal = () => {
     const [content, setContent] = useState('')
     const [images, setImages] = useState([])
     const [stream, setStream] = useState(false)
+    const [tracks, setTracks] = useState('')
     const videoRef = useRef()
     const refCanvas = useRef()
-    const [tracks, setTracks] = useState('')
+
 
     const handleChangeImage = e => {
         const files = [...e.target.files]
@@ -23,7 +25,7 @@ const StatusModal = () => {
             }
             return newImages.push(file)
         })
-        if (err) dispatch({ type: GLOBAL_TYPES.ALERT, payload: {error: err}})
+        if (err) dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err } })
         setImages([...images, ...newImages])
     }
 
@@ -37,22 +39,47 @@ const StatusModal = () => {
         setStream(true)
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: true })
-            .then(mediaStream => {
-                videoRef.current.srcObject = mediaStream
-                videoRef.current.play()
-                const track = mediaStream.getTracks()
-                setTracks(track[0])
-            }).catch(err => console.log(err))
+                .then(mediaStream => {
+                    videoRef.current.srcObject = mediaStream
+                    videoRef.current.play()
+                    const track = mediaStream.getTracks()
+                    setTracks(track[0])
+                }).catch(err => console.log(err))
         }
     }
 
     const handleCapture = () => {
-        
+        const width = videoRef.current.clientWidth
+        const height = videoRef.current.clientHeight
+
+        refCanvas.current.setAttribute("width", width)
+        refCanvas.current.setAttribute("height", height)
+        const ctx = refCanvas.current.getContext('2d')
+        ctx.drawImage(videoRef.current, 0, 0, width, height)
+        let URL = refCanvas.canvas.current.toDataURL()
+        setImages([...images, { camera: URL }])
+    }
+
+    const handleStopStream = () => {
+        tracks.stop()
+        setStream(false)
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault()
+        if (images.length === 0) {
+            return dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: "Please add your photo" } })
+        }
+        dispatch(createPost({ content, images, auth }))
+        setContent('')
+        setImages([])
+        if (tracks) tracks.stop()
+        dispatch({ type: GLOBAL_TYPES.STATUS, payload: false })
     }
 
     return (
         <div className="status-modal">
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div className="status-header">
                     <h5 className="m-0">Create Post</h5>
                     <span onClick={() => dispatch({
@@ -72,26 +99,26 @@ const StatusModal = () => {
                             <div key={index} id="file-img">
                                 <img
                                     className="img-thumbnail"
-                                    src={URL.createObjectURL(img)} 
+                                    src={img.camera ? img.camera : URL.createObjectURL(img)}
                                     alt="images"
-                                    style={{filter: theme ? 'invert(1)' : 'invert(0)'}}  
+                                    style={{ filter: theme ? 'invert(1)' : 'invert(0)' }}
                                 />
                                 <span onClick={() => deleteImages(index)}>&times;</span>
                             </div>
                         ))}
                     </div>
                     {stream &&
-                        <div className="stream">
+                        <div className="stream position-relative">
                             <video
-                                autoPlay 
-                                muted 
+                                autoPlay
+                                muted
                                 ref={videoRef}
                                 width="100%"
                                 height="100%"
-                                style={{filter: theme ? 'invert(1)' : 'invert(0)'}}
+                                style={{ filter: theme ? 'invert(1)' : 'invert(0)' }}
                             />
-                            <span>&times;</span>
-                            <canvas ref={refCanvas} />
+                            <span onClick={handleStopStream}>&times;</span>
+                            <canvas ref={refCanvas} style={{ display: 'none' }} />
                         </div>
                     }
                     <div className="input-images">
@@ -109,7 +136,9 @@ const StatusModal = () => {
                     </div>
                 </div>
                 <div className="status-footer">
-                    <button className="btn btn-secondary w-100">Post</button>
+                    <button className="btn btn-secondary w-100">
+                        Post
+                    </button>
                 </div>
             </form>
         </div>

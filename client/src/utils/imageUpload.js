@@ -14,7 +14,11 @@ export const imageUpload = async images => {
     let imgArr = []
     for (const item of images) {
         const formData = new FormData()
-        formData.append("file", item)
+        if (item.camera) {
+            formData.append("file", item.camera)
+        } else {
+            formData.append("file", item)
+        }
         formData.append("upload_preset", "jf9irltl")
         formData.append("cloud_name", "dj7zmqrth")
         const res = await fetch("https://api.cloudinary.com/v1_1/dj7zmqrth/image/upload", {
