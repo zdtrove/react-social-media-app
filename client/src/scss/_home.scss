@@ -34,6 +34,7 @@
         position: absolute;
         left: inherit !important;
         right: 0;
+        transform: translate3d(0px, 24px, 0px) !important;
       }
       .dropdown-item {
         display: flex;

@@ -2,13 +2,15 @@ import React from 'react'
 import Avatar from '../../Avatar'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { GLOBAL_TYPES } from '../../../redux/actions/globalTypes'
 
 const CardHeader = ({ post }) => {
     const { auth } = useSelector(state => state)
+    const dispatch = useDispatch()
 
     const handleEditPost = () => {
-        console.log(post)
+        dispatch({ type: GLOBAL_TYPES.STATUS, payload: { ...post, onEdit: true } })
     }
 
     return (
