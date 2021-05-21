@@ -34,7 +34,7 @@ const Info = () => {
 		} else {
 			dispatch({ type: GLOBAL_TYPES.MODAL, payload: false })
 		}
-	}, [showFollowers, showFollowing, onEdit])
+	}, [showFollowers, showFollowing, onEdit, dispatch])
 
 	return (
 		<div className="info">

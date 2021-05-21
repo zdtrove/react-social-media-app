@@ -24,7 +24,7 @@
     .cardHeader {
       display: flex;
       justify-content: space-between;
-      align-item: center;
+      align-items: center;
       cursor: pointer;
       padding: 15px 25px;
       .card-name {
@@ -32,9 +32,9 @@
       }
       .dropdown-menu {
         position: absolute;
-        left: inherit !important;
+        left: inherit;
         right: 0;
-        transform: translate3d(0px, 24px, 0px) !important;
+        // transform: translate3d(0px, 24px, 0px) !important;
       }
       .dropdown-item {
         display: flex;
