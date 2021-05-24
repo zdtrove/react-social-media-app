@@ -82,6 +82,14 @@ const postCtrl = {
             return res.status(500).json({ msg: err.message })
         }
     },
+    getUserPosts: async (req, res) => {
+        try {
+            const posts = await Posts.find({ user: req.params.id }).sort("-createdAt")
+            res.json({ posts })
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
 }
 
 module.exports = postCtrl
