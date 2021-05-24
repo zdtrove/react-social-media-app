@@ -15,15 +15,15 @@ const Profile = () => {
 		if (profile.ids.every(item => item !== id)) {
 			dispatch(getProfileUsers({ users: profile.users, id, auth }))
 		}
-	}, [id, profile.users, auth, dispatch])
+	}, [id, profile.users, profile.ids, auth, dispatch])
 
 	return (
 		<div className="profile">
+			<Info auth={auth} profile={profile} dispatch={dispatch} id={id} />
 			{profile.loading
 				? <img className="mx-auto my-4 d-block" src={LoadIcon} alt="loading" />
-				: <Info auth={auth} profile={profile} dispatch={dispatch} id={id} />
+				: <Posts auth={auth} profile={profile} dispatch={dispatch} id={id} />
 			}
-			<Posts />
 		</div>
 	)
 }

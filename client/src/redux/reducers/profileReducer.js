@@ -35,6 +35,11 @@ const profileReducer = (state = initialState, action) => {
 				...state,
 				ids: [...state.ids, action.payload]
 			}
+		case PROFILE_TYPES.GET_PROFILE_POSTS:
+			return {
+				...state,
+				posts: [...state.posts, action.payload]
+			}
 		default:
 			return state
 	}

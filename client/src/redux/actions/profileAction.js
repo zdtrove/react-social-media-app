@@ -28,7 +28,7 @@ export const getProfileUsers = ({ users, id, auth }) => async dispatch => {
 
 		dispatch({
 			type: PROFILE_TYPES.GET_PROFILE_POSTS,
-			payload: posts.data
+			payload: {...posts.data, _id: id, page: 2}
 		})
 
 		dispatch({ type: PROFILE_TYPES.LOADING_PROFILE, payload: false })
