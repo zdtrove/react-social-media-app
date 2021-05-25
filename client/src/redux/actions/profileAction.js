@@ -8,10 +8,11 @@ export const PROFILE_TYPES = {
 	FOLLOW: 'FOLLOW',
 	UNFOLLOW: 'UNFOLLOW',
 	GET_PROFILE_ID: 'GET_PROFILE_ID',
-	GET_PROFILE_POSTS: 'GET_PROFILE_POSTS'
+	GET_PROFILE_POSTS: 'GET_PROFILE_POSTS',
+	UPDATE_PROFILE_POST: 'UPDATE_PROFILE_POST'
 }
 
-export const getProfileUsers = ({ users, id, auth }) => async dispatch => {
+export const getProfileUsers = ({ id, auth }) => async dispatch => {
 	dispatch({ type: PROFILE_TYPES.GET_PROFILE_ID, payload: id })
 	try {
 		dispatch({ type: PROFILE_TYPES.LOADING_PROFILE, payload: true })
@@ -28,7 +29,7 @@ export const getProfileUsers = ({ users, id, auth }) => async dispatch => {
 
 		dispatch({
 			type: PROFILE_TYPES.GET_PROFILE_POSTS,
-			payload: {...posts.data, _id: id, page: 2}
+			payload: { ...posts.data, _id: id, page: 2 }
 		})
 
 		dispatch({ type: PROFILE_TYPES.LOADING_PROFILE, payload: false })
