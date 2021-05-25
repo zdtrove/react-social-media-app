@@ -24,7 +24,8 @@ const postReducer = (state = initialState, action) => {
             return {
                 ...state,
                 posts: action.payload.posts,
-                result: action.payload.result
+                result: action.payload.result,
+                page: action.payload.page
             }
         case POST_TYPES.UPDATE_POST:
             return {

@@ -23,7 +23,7 @@ const Posts = ({ auth, id, dispatch, profile }) => {
 
 	const handleLoadMore = async () => {
 		setLoad(true)
-		const res = await getDataAPI(`user_posts/${id}?limit=${page * 3}`, auth.token)
+		const res = await getDataAPI(`user_posts/${id}?limit=${page * 9}`, auth.token)
 		const newData = { ...res.data, page: page + 1, _id: id }
 		dispatch({ type: PROFILE_TYPES.UPDATE_PROFILE_POST, payload: newData })
 		setLoad(false)
