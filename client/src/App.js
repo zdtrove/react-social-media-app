@@ -12,6 +12,9 @@ import Header from './components/header/Header'
 import StatusModal from './components/StatusModal'
 import { getPosts } from './redux/actions/postAction'
 import { getSuggestions } from './redux/actions/suggestionsAction'
+import io from 'socket.io-client'
+import { GLOBAL_TYPES } from './redux/actions/globalTypes'
+import SocketClient from './SocketClient'
 
 function App() {
   const { auth, status, modal } = useSelector(state => state)
@@ -19,6 +22,9 @@ function App() {
 
   useEffect(() => {
     dispatch(refreshToken())
+    const socket = io()
+    dispatch({ type: GLOBAL_TYPES.SOCKET, payload: socket })
+    return () => socket.close()
   }, [dispatch])
 
   useEffect(() => {
@@ -36,6 +42,7 @@ function App() {
         <div className="main">
           {auth.token && <Header />}
           {status && <StatusModal />}
+          {auth.token && <SocketClient />}
           <Route exact path="/" component={auth.token ? Home : Login} />
           <Route exact path="/register" component={Register} />
           <div className="wrap-page">

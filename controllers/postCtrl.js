@@ -1,6 +1,7 @@
 const Posts = require('../models/postModel')
 const Comments = require('../models/commentModel')
 const Users = require('../models/userModel')
+const { ITEM_PER_PAGE } = require('../config'); 
 
 class APIfeatures {
     constructor(query, queryString) {
@@ -10,7 +11,7 @@ class APIfeatures {
 
     paginating() {
         const page = this.queryString.page * 1 || 1
-        const limit = this.queryString.limit * 1 || 9
+        const limit = this.queryString.limit * 1 || ITEM_PER_PAGE
         const skip = (page - 1) * limit
         this.query = this.query.skip(skip).limit(limit)
         return this
@@ -43,7 +44,7 @@ const postCtrl = {
             }), req.query).paginating()
 
             const posts = await features.query.sort('-createdAt')
-                .populate("user likes", "avatar username fullname")
+                .populate("user likes", "avatar username fullname followers")
                 .populate({
                     path: "comments",
                     populate: {
@@ -147,7 +148,7 @@ const postCtrl = {
     getPostsDiscover: async (req, res) => {
         try {
             const newArr = [...req.user.following, req.user._id]
-            const num = req.query.num || 9
+            const num = req.query.num || ITEM_PER_PAGE
             const posts = await Posts.aggregate([
                 { $match: { user: { $nin: newArr } } },
                 { $sample: { size: Number(num) } },

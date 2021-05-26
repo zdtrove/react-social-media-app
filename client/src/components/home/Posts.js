@@ -5,6 +5,7 @@ import LoadMoreBtn from '../LoadMoreBtn'
 import LoadIcon from '../../images/loading.gif'
 import { getDataAPI } from '../../utils/fetchData'
 import { POST_TYPES } from '../../redux/actions/postAction'
+import { ITEM_PER_PAGE } from '../../utils/config'
 
 const Posts = () => {
     const { homePosts, auth } = useSelector(state => state)
@@ -13,7 +14,7 @@ const Posts = () => {
 
     const handleLoadMore = async () => {
 		setLoad(true)
-		const res = await getDataAPI(`posts?limit=${homePosts.page * 9}`, auth.token)
+		const res = await getDataAPI(`posts?limit=${homePosts.page * ITEM_PER_PAGE}`, auth.token)
 		dispatch({ 
 			type: POST_TYPES.GET_POSTS, 
 			payload: {...res.data, page: homePosts.page + 1}

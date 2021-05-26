@@ -8,7 +8,7 @@ import ShareModal from '../../ShareModal'
 import { BASE_URL } from '../../../utils/config'
 
 const CardFooter = ({ post }) => {
-	const { auth, theme } = useSelector(state => state)
+	const { auth, theme, socket } = useSelector(state => state)
 	const dispatch = useDispatch()
 
 	const [isLike, setIsLike] = useState(false)
@@ -36,14 +36,14 @@ const CardFooter = ({ post }) => {
 	const handleLike = async () => {
 		if (loadLike) return;
 		setLoadLike(true)
-		await dispatch(likePost({ post, auth }))
+		await dispatch(likePost({ post, auth, socket }))
 		setLoadLike(false)
 	}
 
 	const handleUnLike = async () => {
 		if (loadLike) return;
 		setLoadLike(true)
-		await dispatch(unLikePost({ post, auth }))
+		await dispatch(unLikePost({ post, auth, socket }))
 		setLoadLike(false)
 	}
 
