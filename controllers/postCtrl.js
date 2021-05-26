@@ -1,4 +1,6 @@
 const Posts = require('../models/postModel')
+const Comments = require('../models/commentModel')
+const Users = require('../models/userModel')
 
 class APIfeatures {
     constructor(query, queryString) {
@@ -27,7 +29,7 @@ const postCtrl = {
             await newPost.save()
 
             res.json({
-                msg: 'Create Post',
+                msg: 'Created Post Success',
                 newPost
             })
         } catch (err) {
@@ -72,7 +74,7 @@ const postCtrl = {
                     }
                 })
             res.json({
-                msg: "Update Post",
+                msg: "Updated Post Success",
                 newPost: {
                     ...post._doc,
                     content, images
@@ -85,22 +87,26 @@ const postCtrl = {
     likePost: async (req, res) => {
         try {
             const post = await Posts.find({ _id: req.params.id, likes: req.user._id })
-            console.log(post)
             if (post.length > 0) return res.status(400).json({ msg: "You liked this post" })
-            await Posts.findOneAndUpdate({ _id: req.params.id }, {
+
+            const like = await Posts.findOneAndUpdate({ _id: req.params.id }, {
                 $push: { likes: req.user._id }
             }, { new: true })
-            res.json({ msg: "liked Post" })
+            if (!like) return res.status(400).json({ msg: 'This post does not exist' })
+
+            res.json({ msg: "Liked Post Success" })
         } catch (err) {
             return res.status(500).json({ msg: err.message })
         }
     },
     unLikePost: async (req, res) => {
         try {
-            await Posts.findOneAndUpdate({ _id: req.params.id }, {
+            const like = await Posts.findOneAndUpdate({ _id: req.params.id }, {
                 $pull: { likes: req.user._id }
             }, { new: true })
-            res.json({ msg: "Unliked Post" })
+            if (!like) return res.status(400).json({ msg: 'This post does not exist' })
+
+            res.json({ msg: "Unliked Post Success" })
         } catch (err) {
             return res.status(500).json({ msg: err.message })
         }
@@ -111,6 +117,7 @@ const postCtrl = {
                 .paginating()
             const posts = await features.query.sort("-createdAt")
             res.json({
+                msg: "Get User Posts Success",
                 posts,
                 result: posts.length
             })
@@ -129,23 +136,81 @@ const postCtrl = {
                         select: "-password"
                     }
                 })
-            res.json({ post })
+
+            if (!post) return res.status(400).json({ msg: 'This post does not exist' })
+
+            res.json({ msg: "Get Post Success", post })
         } catch (err) {
             return res.status(500).json({ msg: err.message })
         }
     },
     getPostsDiscover: async (req, res) => {
         try {
-            const features = new APIfeatures(Posts.find({
-                user: { $nin: [...req.user.following, req.user._id] }
-            }), req.query).paginating()
+            const newArr = [...req.user.following, req.user._id]
+            const num = req.query.num || 9
+            const posts = await Posts.aggregate([
+                { $match: { user: { $nin: newArr } } },
+                { $sample: { size: Number(num) } },
+            ])
 
-            const posts = await features.query.sort('-createdAt')
-
-            res.json({
+            return res.json({
                 msg: 'Get Discover Success',
                 result: posts.length,
                 posts
+            })
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    deletePost: async (req, res) => {
+        try {
+            const post = await Posts.findOneAndDelete({ _id: req.params.id, user: req.user._id })
+            await Comments.deleteMany({ _id: { $in: post.comments } })
+
+            res.json({ msg: 'Deleted Post Success' })
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    savedPost: async (req, res) => {
+        try {
+            const user = await Users.find({ _id: req.user._id, saved: req.params.id })
+            if (user.length > 0) return res.status(400).json({ msg: "You saved this post" })
+
+            const save = await Users.findOneAndUpdate({ _id: req.user._id }, {
+                $push: { saved: req.params.id }
+            }, { new: true })
+            if (!save) return res.status(400).json({ msg: 'This user does not exist' })
+
+            res.json({ msg: "Saved Post Success" })
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    unSavedPost: async (req, res) => {
+        try {
+            const save = await Users.findOneAndUpdate({ _id: req.user._id }, {
+                $pull: { saved: req.params.id }
+            }, { new: true })
+            if (!save) return res.status(400).json({ msg: 'This user does not exist' })
+
+            res.json({ msg: "Unsaved Post Success" })
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    getSavedPosts: async (req, res) => {
+        try {
+            const features = new APIfeatures(Posts.find({
+                _id: { $in: req.user.saved }
+            }), req.query).paginating()
+
+            const savedPosts = await features.query.sort("-createdAt")
+
+            res.json({
+                msg: "Get Saved Post Success",
+                savedPosts,
+                result: savedPosts.length
             })
         } catch (err) {
             return res.status(500).json({ msg: err.message })

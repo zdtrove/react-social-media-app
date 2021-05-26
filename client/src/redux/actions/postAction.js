@@ -1,13 +1,14 @@
 import { GLOBAL_TYPES } from "./globalTypes"
 import { imageUpload } from '../../utils/imageUpload'
-import { getDataAPI, patchDataAPI, postDataAPI } from '../../utils/fetchData'
+import { deleteDataAPI, getDataAPI, patchDataAPI, postDataAPI } from '../../utils/fetchData'
 
 export const POST_TYPES = {
     CREATE_POST: 'CREATE_POST',
     LOADING_POST: 'LOADING_POST',
     GET_POSTS: 'GET_POSTS',
     UPDATE_POST: 'UPDATE_POST',
-    GET_POST: 'GET_POST'
+    GET_POST: 'GET_POST',
+    DELETE_POST: 'DELETE_POST'
 }
 
 export const createPost = ({ content, images, auth }) => async dispatch => {
@@ -35,7 +36,7 @@ export const getPosts = token => async dispatch => {
         const res = await getDataAPI('posts', token)
         dispatch({
             type: POST_TYPES.GET_POSTS,
-            payload: {...res.data, page: 2}
+            payload: { ...res.data, page: 2 }
         })
         dispatch({ type: POST_TYPES.LOADING_POST, payload: false })
     } catch (err) {
@@ -110,5 +111,43 @@ export const getPost = ({ detailPost, id, auth }) => async dispatch => {
                 payload: { error: err.response.data.msg }
             })
         }
+    }
+}
+
+export const deletePost = ({ post, auth }) => async dispatch => {
+    dispatch({ type: POST_TYPES.DELETE_POST, payload: post })
+    try {
+        await deleteDataAPI(`post/${post._id}`, auth.token)
+    } catch (err) {
+        dispatch({
+            type: GLOBAL_TYPES.ALERT,
+            payload: { error: err.response.data.msg }
+        })
+    }
+}
+
+export const savedPost = ({ post, auth }) => async dispatch => {
+    const newUser = { ...auth.user, saved: [...auth.user.saved, post._id] }
+    dispatch({ type: GLOBAL_TYPES.AUTH, payload: { ...auth, user: newUser } })
+    try {
+        await patchDataAPI(`savedPost/${post._id}`, null, auth.token)
+    } catch (err) {
+        dispatch({
+            type: GLOBAL_TYPES.ALERT,
+            payload: { error: err.response.data.msg }
+        })
+    }
+}
+
+export const unSavedPost = ({ post, auth }) => async dispatch => {
+    const newUser = { ...auth.user, saved: auth.user.saved.filter(id => id !== post._id) }
+    dispatch({ type: GLOBAL_TYPES.AUTH, payload: { ...auth, user: newUser } })
+    try {
+        await patchDataAPI(`unSavedPost/${post._id}`, null, auth.token)
+    } catch (err) {
+        dispatch({
+            type: GLOBAL_TYPES.ALERT,
+            payload: { error: err.response.data.msg }
+        })
     }
 }

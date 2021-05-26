@@ -12,14 +12,14 @@ const Discover = () => {
 	const [load, setLoad] = useState(false)
 
 	useEffect(() => {
-		if (!discover.fisrLoad) {
+		if (!discover.firstLoad) {
 			dispatch(getDiscoverPosts(auth.token))
 		}
-	}, [dispatch, auth.token, discover.fisrLoad])
+	}, [dispatch, auth.token, discover.firstLoad])
 
 	const handleLoadMore = async () => {
 		setLoad(true)
-		const res = await getDataAPI(`post_discover?limit=${discover.page * 3}`, auth.token)
+		const res = await getDataAPI(`post_discover?num=${discover.page * 9}`, auth.token)
 		dispatch({ type: DISCOVER_TYPES.UPDATE_POST, payload: res.data })
 		setLoad(false)
 	}

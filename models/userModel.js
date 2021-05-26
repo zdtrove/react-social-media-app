@@ -34,18 +34,9 @@ const userSchema = new mongoose.Schema({
         maxlength: 200,
     },
     website: { type: String, default: '' },
-    followers: [
-        {
-            type: mongoose.Types.ObjectId,
-            ref: 'user',
-        }
-    ],
-    following: [
-        {
-            type: mongoose.Types.ObjectId,
-            ref: 'user',
-        }
-    ],
+    followers: [{ type: mongoose.Types.ObjectId, ref: 'user' }],
+    following: [{ type: mongoose.Types.ObjectId, ref: 'user' }],
+    saved: [{ type: mongoose.Types.ObjectId, ref: 'user' }]
 }, {
     timestamps: true
 })

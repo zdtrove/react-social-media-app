@@ -2,11 +2,11 @@ import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../../redux/actions/authAction'
-import {GLOBAL_TYPES} from '../../redux/actions/globalTypes'
+import { GLOBAL_TYPES } from '../../redux/actions/globalTypes'
 import Avatar from '../Avatar'
 
 const Menu = () => {
-	const navLinks = [
+    const navLinks = [
         { label: 'Home', icon: 'home', path: '/' },
         { label: 'Message', icon: 'near_me', path: '/message' },
         { label: 'Discover', icon: 'explore', path: '/discover' },
@@ -19,8 +19,8 @@ const Menu = () => {
         if (pn === pathname) return 'active'
     }
 
-	return (
-		<div className="menu">
+    return (
+        <div className="menu">
             <ul className="flex-row navbar-nav">
                 {navLinks.map((link, index) => (
                     <li key={index} className={`nav-item px-2 ${isActive(link.path)}`}>
@@ -29,14 +29,14 @@ const Menu = () => {
                         </Link>
                     </li>
                 ))}
-                <li className="nav-item dropdown">
+                <li className="nav-item dropdown" style={{ opacity: 1 }}>
                     <span className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <Avatar src={auth.user.avatar} size="medium" />
                     </span>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                         <Link className="dropdown-item" to={`/profile/${auth.user._id}`}>Profile</Link>
-                        <label 
-                            htmlFor="theme" 
+                        <label
+                            htmlFor="theme"
                             className="dropdown-item"
                             onClick={() => dispatch({
                                 type: GLOBAL_TYPES.THEME, payload: !theme
@@ -50,7 +50,7 @@ const Menu = () => {
                 </li>
             </ul>
         </div>
-	)
+    )
 }
 
 export default Menu
