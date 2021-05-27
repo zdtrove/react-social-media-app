@@ -51,6 +51,17 @@ const SocketServer = socket => {
 			})
 		}
 	})
+
+	// Follow
+	socket.on('follow', newUser => {
+		const user = users.find(user => user.id === newUser._id)
+		user && socket.to(`${user.socketId}`).emit('followToClient', newUser)
+	})
+
+	socket.on('unFollow', newUser => {
+		const user = users.find(user => user.id === newUser._id)
+		user && socket.to(`${user.socketId}`).emit('unFollowToClient', newUser)
+	})
 }
 
 module.exports = SocketServer

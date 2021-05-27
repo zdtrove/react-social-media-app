@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { GLOBAL_TYPES } from './redux/actions/globalTypes'
 import { POST_TYPES } from './redux/actions/postAction'
 
 const SocketClient = () => {
@@ -40,6 +41,21 @@ const SocketClient = () => {
 		})
 		return () => socket.off('deleteCommentToClient')
 	}, [socket, dispatch])
+
+	// Follow
+	useEffect(() => {
+		socket.on('followToClient', newUser => {
+			dispatch({ type: GLOBAL_TYPES.AUTH, payload: { ...auth, user: newUser } })
+		})
+		return () => socket.off('followToClient')
+	}, [socket, dispatch, auth])
+
+	useEffect(() => {
+		socket.on('unFollowToClient', newUser => {
+			dispatch({ type: GLOBAL_TYPES.AUTH, payload: { ...auth, user: newUser } })
+		})
+		return () => socket.off('unFollowToClient')
+	}, [socket, dispatch, auth])
 
 	return <>
 

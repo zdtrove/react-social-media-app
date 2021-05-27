@@ -1,7 +1,7 @@
 const Posts = require('../models/postModel')
 const Comments = require('../models/commentModel')
 const Users = require('../models/userModel')
-const { ITEM_PER_PAGE } = require('../config'); 
+const { ITEM_PER_PAGE } = require('../config');
 
 class APIfeatures {
     constructor(query, queryString) {
@@ -31,7 +31,10 @@ const postCtrl = {
 
             res.json({
                 msg: 'Created Post Success',
-                newPost
+                newPost: {
+                    ...newPost._doc,
+                    user: req.user
+                }
             })
         } catch (err) {
             return res.status(500).json({ msg: err.message })
@@ -168,7 +171,13 @@ const postCtrl = {
             const post = await Posts.findOneAndDelete({ _id: req.params.id, user: req.user._id })
             await Comments.deleteMany({ _id: { $in: post.comments } })
 
-            res.json({ msg: 'Deleted Post Success' })
+            res.json({
+                msg: 'Deleted Post Success',
+                newPost: {
+                    ...post,
+                    user: req.user
+                }
+            })
         } catch (err) {
             return res.status(500).json({ msg: err.message })
         }
