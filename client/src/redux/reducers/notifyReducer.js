@@ -13,6 +13,11 @@ const notifyReducer = (state = initialState, action) => {
                 ...state,
                 data: action.payload
             }
+        case NOTIFY_TYPES.CREATE_NOTIFY:
+            return {
+                ...state,
+                data: [action.payload, ...state.data]
+            }
         default:
             return state
     }

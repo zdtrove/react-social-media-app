@@ -31,11 +31,11 @@ const Menu = () => {
                 ))}
 
                 <li className="nav-item dropdown" style={{ opacity: 1 }}>
-                    <span className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span className="nav-link position-relative" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span className="material-icons" style={{ color: notify.data.length > 0 ? 'crimson' : '' }}>
                             favorite
                         </span>
-                        <span>{notify.data.length}</span>
+                        <span className="notify-length">{notify.data.length}</span>
                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                             <NotifyModal />
                         </div>

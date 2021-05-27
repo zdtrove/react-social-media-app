@@ -34,10 +34,8 @@ const notifyCtrl = {
     },
     getNotifies: async (req, res) => {
         try {
-            console.log(req.user)
             const notifies = await Notifies.find({ recipients: req.user._id })
                 .sort('isRead').populate('user', 'avatar username')
-            console.log(notifies)
             res.json({
                 msg: "Get Notifies Success",
                 notifies
