@@ -1,5 +1,6 @@
 import { patchDataAPI, postDataAPI, deleteDataAPI } from '../../utils/fetchData'
 import { EditData, DeleteData, GLOBAL_TYPES } from './globalTypes'
+import { createNotify, removeNotify } from './notifyAction'
 import { POST_TYPES } from './postAction'
 
 export const createComment = (post, newComment, auth, socket) => async dispatch => {
@@ -16,6 +17,16 @@ export const createComment = (post, newComment, auth, socket) => async dispatch 
 
         // Socket
         socket.emit('createComment', newPost)
+        // Notify
+        const msg = {
+            id: res.data.newComment._id,
+            text: newComment.reply ? 'mentioned you in a comment' : 'has commented on your post',
+            recipients: newComment.reply ? [newComment.tag._id] : [post.user._id],
+            url: `/post/${post._id}`,
+            content: post.content,
+            image: post.images[0].url
+        }
+        dispatch(createNotify({ msg, auth, socket }))
     } catch (err) {
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
     }
@@ -28,15 +39,15 @@ export const updateComment = ({ comment, post, content, auth }) => async dispatc
     try {
         await patchDataAPI(`comment/${comment._id}`, { content }, auth.token)
     } catch (err) {
-        dispatch({ 
-            type: GLOBAL_TYPES.ALERT, 
-            payload: { error: err.response.data.msg } 
+        dispatch({
+            type: GLOBAL_TYPES.ALERT,
+            payload: { error: err.response.data.msg }
         })
     }
 }
 
 export const likeComment = ({ comment, post, auth }) => async dispatch => {
-    const newComment = {...comment, likes: [...comment.likes, auth.user]}
+    const newComment = { ...comment, likes: [...comment.likes, auth.user] }
     const newComments = EditData(post.comments, comment._id, newComment)
     const newPost = { ...post, comments: newComments }
     dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost })
@@ -44,15 +55,15 @@ export const likeComment = ({ comment, post, auth }) => async dispatch => {
     try {
         await patchDataAPI(`comment/${comment._id}/like`, null, auth.token)
     } catch (err) {
-        dispatch({ 
-            type: GLOBAL_TYPES.ALERT, 
-            payload: { error: err.response.data.msg } 
+        dispatch({
+            type: GLOBAL_TYPES.ALERT,
+            payload: { error: err.response.data.msg }
         })
     }
 }
 
 export const unLikeComment = ({ comment, post, auth }) => async dispatch => {
-    const newComment = {...comment, likes: DeleteData(comment.likes, auth.user._id)}
+    const newComment = { ...comment, likes: DeleteData(comment.likes, auth.user._id) }
     const newComments = EditData(post.comments, comment._id, newComment)
     const newPost = { ...post, comments: newComments }
     dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost })
@@ -60,9 +71,9 @@ export const unLikeComment = ({ comment, post, auth }) => async dispatch => {
     try {
         await patchDataAPI(`comment/${comment._id}/unlike`, null, auth.token)
     } catch (err) {
-        dispatch({ 
-            type: GLOBAL_TYPES.ALERT, 
-            payload: { error: err.response.data.msg } 
+        dispatch({
+            type: GLOBAL_TYPES.ALERT,
+            payload: { error: err.response.data.msg }
         })
     }
 }
@@ -78,11 +89,19 @@ export const deleteComment = ({ post, comment, auth, socket }) => async dispatch
     try {
         deleteArr.forEach(item => {
             deleteDataAPI(`comment/${item._id}`, auth.token)
+            // Notify
+            const msg = {
+                id: item._id,
+                text: comment.reply ? 'mentioned you in a comment' : 'has commented on your post',
+                recipients: comment.reply ? [comment.tag._id] : [post.user._id],
+                url: `/post/${post._id}`
+            }
+            dispatch(removeNotify({ msg, auth, socket }))
         })
     } catch (err) {
-        dispatch({ 
-            type: GLOBAL_TYPES.ALERT, 
-            payload: { error: err.response.data.msg } 
+        dispatch({
+            type: GLOBAL_TYPES.ALERT,
+            payload: { error: err.response.data.msg }
         })
     }
 }

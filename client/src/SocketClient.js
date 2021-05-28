@@ -4,6 +4,17 @@ import { GLOBAL_TYPES } from './redux/actions/globalTypes'
 import { POST_TYPES } from './redux/actions/postAction'
 import { NOTIFY_TYPES } from './redux/actions/notifyAction'
 
+const spawnNotification = (body, icon, url, title) => {
+	let options = {
+		body, icon
+	}
+	let n = new Notification(title, options)
+	n.onclick = e => {
+		e.preventDefault()
+		window.open(url, '_blank')
+	}
+}
+
 const SocketClient = () => {
 	const { auth, socket } = useSelector(state => state)
 	const dispatch = useDispatch()
@@ -62,8 +73,21 @@ const SocketClient = () => {
 	useEffect(() => {
 		socket.on('createNotifyToClient', msg => {
 			dispatch({ type: NOTIFY_TYPES.CREATE_NOTIFY, payload: msg })
+			spawnNotification(
+				msg.user.username + ' ' + msg.text,
+				msg.user.avatar,
+				msg.url,
+				'V-NETWORK'
+			)
 		})
 		return () => socket.off('createNotifyToClient')
+	}, [socket, dispatch])
+
+	useEffect(() => {
+		socket.on('removeNotifyToClient', msg => {
+			dispatch({ type: NOTIFY_TYPES.REMOVE_NOTIFY, payload: msg })
+		})
+		return () => socket.off('removeNotifyToClient')
 	}, [socket, dispatch])
 
 	return <>

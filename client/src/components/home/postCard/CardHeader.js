@@ -8,7 +8,7 @@ import { deletePost } from '../../../redux/actions/postAction'
 import { BASE_URL } from '../../../utils/config'
 
 const CardHeader = ({ post }) => {
-    const { auth } = useSelector(state => state)
+    const { auth, socket } = useSelector(state => state)
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -18,7 +18,7 @@ const CardHeader = ({ post }) => {
 
     const handleDeletePost = () => {
         if (window.confirm("Are you sure want to delete this post?")) {
-            dispatch(deletePost({ post, auth }))
+            dispatch(deletePost({ post, auth, socket }))
             return history.push('/')
         }
     }

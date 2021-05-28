@@ -4,59 +4,78 @@ import NoNotice from '../images/notice.png'
 import { Link } from 'react-router-dom'
 import Avatar from './Avatar'
 import moment from 'moment'
+import { isReadNotify } from '../redux/actions/notifyAction'
+import { NOTIFY_TYPES } from '../redux/actions/notifyAction'
 
 const NotifyModal = () => {
-    const { auth, notify } = useSelector(state => state)
-    const dispatch = useDispatch()
+	const { auth, notify } = useSelector(state => state)
+	const dispatch = useDispatch()
 
-    return (
-        <div style={{ minWidth: '280px' }}>
-            <div className="d-flex justify-content-between align-items-center px-3">
-                <h3>Notification</h3>
-                {
-                	notify.sound
-                		? <i style={{ fontSize: '1.2rem', cursor: 'pointer' }} className="fas fa-bell text-danger" />
-                		: <i style={{ fontSize: '1.2rem', cursor: 'pointer' }} className="fas fa-bell-slash text-danger" />
-                }
+	const handleIsRead = msg => {
+		dispatch(isReadNotify({ msg, auth }))
+	}
+
+	const handleSound = () => {
+		dispatch({ type: NOTIFY_TYPES.UPDATE_SOUND, payload: !notify.sound })
+	}
+
+	return (
+		<div style={{ minWidth: '280px' }}>
+			<div className="d-flex justify-content-between align-items-center px-3">
+				<h3>Notification</h3>
+				{
+					notify.sound
+						? <i
+							style={{ fontSize: '1.2rem', cursor: 'pointer' }}
+							className="fas fa-bell text-danger"
+							onClick={handleSound}
+						/>
+						: <i
+							style={{ fontSize: '1.2rem', cursor: 'pointer' }}
+							className="fas fa-bell-slash text-danger"
+							onClick={handleSound}
+						/>
+				}
+			</div>
+			<hr className="mt-0" />
+			{
+				notify.data.length === 0 &&
+				<img src={NoNotice} alt="no notice" className="w-100" />
+			}
+			<div style={{ maxHeight: 'calc(100vh - 200px)', overflow: 'auto' }}>
+				{
+					notify.data.map((msg, index) => (
+						<div key={index} className="px-2 mb-3">
+							<Link to={`${msg.url}`} className="d-flex text-dark align-items-center"
+								onClick={() => handleIsRead(msg)}>
+								<Avatar src={msg.user.avatar} size="big" />
+								<div className="mx-1 flex-fill">
+									<div>
+										<strong className="mr-1">{msg.user.username}</strong>
+										<span>{msg.text}</span>
+									</div>
+									{msg.content && <small>{msg.content.slice(0, 20)}...</small>}
+								</div>
+								<div style={{ width: '30px' }}>
+									{msg.image && <Avatar src={msg.image} size="medium" />}
+								</div>
+							</Link>
+							<small className="text-muted d-flex justify-content-between px-2 align-items-center">
+								{moment(msg.createdAt).fromNow()}
+								{
+									!msg.isRead && <i className="fas fa-circle text-primary" />
+								}
+							</small>
+						</div>
+					))
+				}
+			</div>
+			<hr className="my-1" />
+			<div className="text-right text-danger mr-2" style={{ cursor: 'pointer' }}>
+				Delete All
             </div>
-            <hr className="mt-0" />
-            {
-            	notify.data.length === 0 &&
-            	<img src={NoNotice} alt="no notice" className="w-100" />
-            }
-            <div style={{ maxHeight: 'calc(100vh - 200px)', overflow: 'auto' }}>
-            	{
-            		notify.data.map((msg, index) => (
-            			<div key={index} className="px-2 mb-3">
-            				<Link to={`${msg.url}`} className="d-flex text-dark align-items-center">
-            					<Avatar src={msg.user.avatar} size="big" />
-            					<div className="mx-1 flex-fill">
-            						<div>
-            							<strong className="mr-1">{msg.user.username}</strong>
-            							<span>{msg.text}</span>
-            						</div>
-            						{msg.content && <small>{msg.content.slice(0, 20)}...</small>}
-            					</div>
-            					<div style={{ width: '30px' }}>
-            						{msg.image && <Avatar src={msg.image} size="medium" />}
-            					</div>
-            				</Link>
-            				<small className="text-muted d-flex justify-content-between px-2 align-items-center">
-            					{moment(msg.createdAt).fromNow()}
-            					{
-            						!msg.isRead && <i className="fas fa-circle text-primary" />
-            					}
-            				</small>
-            			</div>
-            		))
-            	}
-            </div>
-            <hr className="my-1" />
-            <div className="text-right text-danger mr-2" style={{ cursor: 'pointer' }}>
-            	Delete All
-            </div>
-        </div>
-    )
+		</div>
+	)
 }
 
 export default NotifyModal

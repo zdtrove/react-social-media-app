@@ -36,10 +36,10 @@ const Menu = () => {
                             favorite
                         </span>
                         <span className="notify-length">{notify.data.length}</span>
-                        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <NotifyModal />
-                        </div>
                     </span>
+                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <NotifyModal />
+                    </div>
                 </li>
 
                 <li className="nav-item dropdown" style={{ opacity: 1 }}>
