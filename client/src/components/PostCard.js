@@ -5,11 +5,11 @@ import CardBody from './home/postCard/CardBody'
 import CardFooter from './home/postCard/CardFooter'
 import CardHeader from './home/postCard/CardHeader'
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, theme }) => {
     return (
         <div className="my-3 card">
             <CardHeader post={post} />
-            <CardBody post={post} />
+            <CardBody theme={theme} post={post} />
             <CardFooter post={post} />
             <Comments post={post} />
             <InputComment post={post} />

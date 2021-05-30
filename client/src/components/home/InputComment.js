@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { createComment } from '../../redux/actions/commentAction'
+import Icons from '../Icons'
 
 const InputComment = ({ children, post, onReply, setOnReply }) => {
     const [content, setContent] = useState('')
-    const { auth, socket } = useSelector(state => state)
+    const { auth, socket, theme } = useSelector(state => state)
     const dispatch = useDispatch()
 
     const handleSubmit = e => {
@@ -29,8 +30,13 @@ const InputComment = ({ children, post, onReply, setOnReply }) => {
     return (
         <form onSubmit={handleSubmit} className="card-footer comment-input">
             {children}
-            <input type="text" placeholder="Add your comment..."
+            <input style={{ 
+                filter: theme ? 'invert(1)' : 'invert(0)',
+                color: theme ? 'white' : '#111',
+                background: theme ? 'rgba(0,0,0,.03)' : ''
+            }} type="text" placeholder="Add your comment..."
                 value={content} onChange={e => setContent(e.target.value)} />
+            <Icons theme={theme} setContent={setContent} content={content} />
             <button type="submit" className="postBtn">
                 Post
             </button>

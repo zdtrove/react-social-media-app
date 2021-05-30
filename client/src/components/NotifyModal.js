@@ -4,8 +4,7 @@ import NoNotice from '../images/notice.png'
 import { Link } from 'react-router-dom'
 import Avatar from './Avatar'
 import moment from 'moment'
-import { isReadNotify } from '../redux/actions/notifyAction'
-import { NOTIFY_TYPES } from '../redux/actions/notifyAction'
+import { isReadNotify, NOTIFY_TYPES, deleteAllNotifies } from '../redux/actions/notifyAction'
 
 const NotifyModal = () => {
 	const { auth, notify } = useSelector(state => state)
@@ -18,6 +17,14 @@ const NotifyModal = () => {
 	const handleSound = () => {
 		dispatch({ type: NOTIFY_TYPES.UPDATE_SOUND, payload: !notify.sound })
 	}
+
+    const handleDeleteAll = () => {
+        const newArr = notify.data.filter(item => item.isRead === false)
+        if (newArr.length === 0) return dispatch(deleteAllNotifies(auth.token))
+        if (window.confirm(`You have ${newArr.length} unread notices. Are you sure you want to delete all?`)) {
+            return dispatch(deleteAllNotifies(auth.token))
+        }   
+    }
 
 	return (
 		<div style={{ minWidth: '280px' }}>
@@ -71,7 +78,8 @@ const NotifyModal = () => {
 				}
 			</div>
 			<hr className="my-1" />
-			<div className="text-right text-danger mr-2" style={{ cursor: 'pointer' }}>
+			<div className="text-right text-danger mr-2" style={{ cursor: 'pointer' }}
+            onClick={handleDeleteAll}>
 				Delete All
             </div>
 		</div>

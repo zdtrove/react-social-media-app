@@ -41,3 +41,9 @@ img {
   height: 100vh;
   overflow: hidden;
 }
+
+@media (max-width: 768px) {
+  .message {
+    height: calc(100vh - 150px);
+  }
+}

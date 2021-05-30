@@ -36,6 +36,11 @@ const notifyReducer = (state = initialState, action) => {
                 ...state,
                 sound: action.payload
             }
+        case NOTIFY_TYPES.DELETE_ALL_NOTIFIES:
+            return {
+                ...state,
+                data: action.payload
+            }
         default:
             return state
     }

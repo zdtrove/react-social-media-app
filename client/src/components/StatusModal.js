@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { GLOBAL_TYPES } from '../redux/actions/globalTypes'
 import { createPost, updatePost } from '../redux/actions/postAction'
+import Icons from './Icons'
+import { imageShow, videoShow } from '../utils/mediaShow'
 
 const StatusModal = () => {
     const { auth, theme, status, socket } = useSelector(state => state)
@@ -20,8 +22,8 @@ const StatusModal = () => {
         let newImages = []
         files.forEach(file => {
             if (!file) return err = "File does not exist"
-            if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
-                return err = "Image format is incorrect"
+            if (file.size > 1024 * 1024 * 5) {
+                return err = "The image/video largest is 5mb"
             }
             return newImages.push(file)
         })
@@ -106,20 +108,38 @@ const StatusModal = () => {
                         placeholder={`${auth.user.username}, what are you thinking?`}
                         value={content}
                         onChange={e => setContent(e.target.value)}
+                        style={{ 
+                            filter: theme ? 'invert(1)' : 'invert(0)',
+                            color: theme ? 'white' : '#111',
+                            background: theme ? 'rgba(0,0,0,.03)' : ''
+                        }}
                     />
+                    <div className="d-flex">
+                        <div className="flet-fill"></div>
+                        <Icons setContent={setContent} content={content} theme={theme} />
+                    </div>
                     <div className="show-images">
                         {images.map((img, index) => (
                             <div key={index} id="file-img">
-                                <img
-                                    className="img-thumbnail"
-                                    src={
-                                        img.camera
-                                            ? img.camera
-                                            : img.url ? img.url : URL.createObjectURL(img)
-                                    }
-                                    alt="images"
-                                    style={{ filter: theme ? 'invert(1)' : 'invert(0)' }}
-                                />
+                                {
+                                    img.camera 
+                                        ? imageShow(img.camera, theme)
+                                        : img.url
+                                            ? <>
+                                                {
+                                                    img.url.match(/video/i)
+                                                        ? videoShow(img.url, theme) 
+                                                        : imageShow(img.url, theme)
+                                                }
+                                            </>
+                                            : <>
+                                                {
+                                                    img.type.match(/video/i)
+                                                        ? videoShow(URL.createObjectURL(img), theme) 
+                                                        : imageShow(URL.createObjectURL(img), theme)
+                                                }
+                                            </>
+                                }
                                 <span onClick={() => deleteImages(index)}>&times;</span>
                             </div>
                         ))}
@@ -146,7 +166,13 @@ const StatusModal = () => {
                                     <i onClick={handleStream} className="fas fa-camera" />
                                     <div className="file-upload">
                                         <i className="fas fa-image" />
-                                        <input onChange={handleChangeImage} type="file" name="file" id="file" multiple accept="image/*" />
+                                        <input 
+                                            onChange={handleChangeImage} 
+                                            type="file" 
+                                            name="file" 
+                                            id="file" 
+                                            multiple accept="image/*,video/*" 
+                                        />
                                     </div>
                                 </>
                         }

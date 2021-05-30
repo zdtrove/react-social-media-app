@@ -8,7 +8,7 @@ import { POST_TYPES } from '../../redux/actions/postAction'
 import { ITEM_PER_PAGE } from '../../utils/config'
 
 const Posts = () => {
-    const { homePosts, auth } = useSelector(state => state)
+    const { homePosts, auth, theme } = useSelector(state => state)
     const dispatch = useDispatch()
     const [load, setLoad] = useState(false)
 
@@ -25,7 +25,7 @@ const Posts = () => {
     return (
         <div className="posts">
             {homePosts.posts.map(post => (
-                <PostCard key={post._id} post={post} />
+                <PostCard theme={theme} key={post._id} post={post} />
             ))}
             {
 				load && <img src={LoadIcon} alt="Loading" className="mx-auto my-4 d-block" />
