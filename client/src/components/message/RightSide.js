@@ -19,6 +19,7 @@ const RightSide = () => {
 	const [media, setMedia] = useState([])
 	const [loadMedia, setLoadMedia] = useState(false)
 	const [page, setPage] = useState(0)
+	const [data, setData] = useState([])
 	const refDisplay = useRef()
 	const pageEnd = useRef()
 
@@ -64,6 +65,13 @@ const RightSide = () => {
 			refDisplay.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
 		}
 	}
+
+	useEffect(() => {
+		const newData = message.data.filter(item => 
+			item.sender === auth.user._id || item.sender === id
+		)
+		setData(newData)
+	}, [message.data, auth.user._id, id])
 
 	useEffect(() => {
 		const newUser = message.users.find(user => user._id === id)
@@ -127,7 +135,7 @@ const RightSide = () => {
 					Load more
 				</button>
 				{
-					message.data.map((msg, index) => (
+					data.map((msg, index) => (
 						<div key={index}>
 							{
 								msg.sender !== auth.user._id &&

@@ -103,7 +103,7 @@ const LeftSide = () => {
 							}
 						</>
 				}
-				<button ref={pageEnd}>Load More</button>
+				<button ref={pageEnd} style={{ opacity: 0 }}>Load More</button>
 			</div>
 		</>
 	)
