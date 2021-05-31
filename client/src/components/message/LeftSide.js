@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import UserCard from '../UserCard'
 import { useSelector, useDispatch } from 'react-redux'
 import { getDataAPI } from '../../utils/fetchData'
@@ -13,6 +13,8 @@ const LeftSide = () => {
 	const { id } = useParams()
 	const [search, setSearch] = useState('')
 	const [searchUsers, setSearchUsers] = useState([])
+	const pageEnd = useRef()
+	const [page, setPage] = useState(0)
 
 	const handleSearch = async e => {
 		e.preventDefault()
@@ -45,43 +47,63 @@ const LeftSide = () => {
 		dispatch(getConversations({ auth }))
 	}, [dispatch, auth, message.firstLoad])
 
+	// Load More
+	useEffect(() => {
+		const observer = new IntersectionObserver(entries => {
+			if (entries[0].isIntersecting) {
+				setPage(p => p + 1)
+			}
+		}, {
+			threshold: 0.1
+		})
+
+		observer.observe(pageEnd.current)
+	}, [setPage])
+
+	useEffect(() => {
+		if (message.resultUsers >= (page - 1) * 9 && page > 1) {
+			dispatch(getConversations({ auth, page }))
+		}
+	}, [message.resultUsers, page, auth, dispatch])
+
 	return (
 		<>
 			<form className="message__header" onSubmit={handleSearch}>
-				<input 
-					type="text" 
-					value={search} 
+				<input
+					type="text"
+					value={search}
 					placeholder="Enter to Search..."
 					onChange={e => setSearch(e.target.value)}
 				/>
 				<button style={{ display: 'none' }} type="submit">Search</button>
 			</form>
 			<div className="message__chatList">
-			{
-				searchUsers.length !== 0
-					? <>
-						{
-							searchUsers.map(user => (
-								<div key={user._id} className={`message-user ${isActive(user)}`}
-								onClick={() => handleAddUser(user)}>
-									<UserCard user={user} />
-								</div>
-							))
-						}
-					</>
-					: <>
-						{
-							message.users.map(user => (
-								<div key={user._id} className={`message-user ${isActive(user)}`}
-								onClick={() => handleAddUser(user)}>
-									<UserCard user={user} msg={true}>
-										<i className="fas fa-circle" />
-									</UserCard>
-								</div>
-							))
-						}
-					</>
-			}
+				{
+					searchUsers.length !== 0
+						? <>
+							{
+								searchUsers.map(user => (
+									<div key={user._id} className={`message-user ${isActive(user)}`}
+										onClick={() => handleAddUser(user)}>
+										<UserCard user={user} />
+									</div>
+								))
+							}
+						</>
+						: <>
+							{
+								message.users.map(user => (
+									<div key={user._id} className={`message-user ${isActive(user)}`}
+										onClick={() => handleAddUser(user)}>
+										<UserCard user={user} msg={true}>
+											<i className="fas fa-circle" />
+										</UserCard>
+									</div>
+								))
+							}
+						</>
+				}
+				<button ref={pageEnd}>Load More</button>
 			</div>
 		</>
 	)

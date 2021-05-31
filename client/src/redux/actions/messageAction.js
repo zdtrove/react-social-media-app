@@ -10,22 +10,23 @@ export const MESS_TYPES = {
 
 export const addUser = ({ user, message }) => dispatch => {
 	if (message.users.every(item => item._id !== user._id)) {
-		dispatch({ type: MESS_TYPES.ADD_USER, payload: {...user, text: '', media: []} })
+		dispatch({ type: MESS_TYPES.ADD_USER, payload: { ...user, text: '', media: [] } })
 	}
 }
 
 export const addMessage = ({ msg, auth, socket }) => async dispatch => {
 	dispatch({ type: MESS_TYPES.ADD_MESSAGE, payload: msg })
+	socket.emit('addMessage', msg)
 	try {
 		await postDataAPI('message', msg, auth.token)
 	} catch (err) {
-		dispatch({ type: GLOBAL_TYPES.ALERT, payload: {error: err.response.data.msg}})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
 	}
 }
 
-export const getConversations = ({ auth }) => async dispatch => {
+export const getConversations = ({ auth, page = 1 }) => async dispatch => {
 	try {
-		const res = await getDataAPI('conversations', auth.token)
+		const res = await getDataAPI(`conversations?limit=${page * 9}`, auth.token)
 		let newArr = []
 		res.data.conversations.forEach(item => {
 			item.recipients.forEach(cv => {
@@ -34,20 +35,20 @@ export const getConversations = ({ auth }) => async dispatch => {
 				}
 			})
 		})
-		dispatch({ 
-			type: MESS_TYPES.GET_CONVERSATIONS, 
-			payload: { newArr, result: res.data.result } 
+		dispatch({
+			type: MESS_TYPES.GET_CONVERSATIONS,
+			payload: { newArr, result: res.data.result }
 		})
 	} catch (err) {
-		dispatch({ type: GLOBAL_TYPES.ALERT, payload: {error: err.response.data.msg}})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
 	}
 }
 
-export const getMessages = ({ auth, id }) => async dispatch => {
+export const getMessages = ({ auth, id, page = 1 }) => async dispatch => {
 	try {
-		const res = await getDataAPI(`message/${id}`, auth.token)
+		const res = await getDataAPI(`message/${id}?limit=${page * 9}`, auth.token)
 		dispatch({ type: MESS_TYPES.GET_MESSAGES, payload: res.data })
 	} catch (err) {
-		dispatch({ type: GLOBAL_TYPES.ALERT, payload: {error: err.response.data.msg}})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
 	}
 }
