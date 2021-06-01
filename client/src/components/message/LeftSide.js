@@ -4,10 +4,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getDataAPI } from '../../utils/fetchData'
 import { GLOBAL_TYPES } from '../../redux/actions/globalTypes'
 import { useHistory, useParams } from 'react-router-dom'
-import { addUser, getConversations } from '../../redux/actions/messageAction'
+import { getConversations, MESSAGE_TYPES } from '../../redux/actions/messageAction'
+import { ITEM_PER_PAGE } from '../../utils/config'
 
 const LeftSide = () => {
-	const { auth, message } = useSelector(state => state)
+	const { auth, message, online } = useSelector(state => state)
 	const dispatch = useDispatch()
 	const history = useHistory()
 	const { id } = useParams()
@@ -33,7 +34,8 @@ const LeftSide = () => {
 	const handleAddUser = user => {
 		setSearch('')
 		setSearchUsers([])
-		dispatch(addUser({ user, message }))
+		dispatch({ type: MESSAGE_TYPES.ADD_USER, payload: { ...user, text: '', media: [] } })
+		dispatch({ type: MESSAGE_TYPES.CHECK_ONLINE_OFFLINE, payload: online })
 		return history.push(`/message/${user._id}`)
 	}
 
@@ -61,10 +63,17 @@ const LeftSide = () => {
 	}, [setPage])
 
 	useEffect(() => {
-		if (message.resultUsers >= (page - 1) * 9 && page > 1) {
+		if (message.resultUsers >= (page - 1) * ITEM_PER_PAGE && page > 1) {
 			dispatch(getConversations({ auth, page }))
 		}
 	}, [message.resultUsers, page, auth, dispatch])
+
+	// Check User Online - Offline
+	useEffect(() => {
+		if (message.firstLoad) {
+			dispatch({ type: MESSAGE_TYPES.CHECK_ONLINE_OFFLINE, payload: online })
+		}
+	}, [online, message.firstLoad, dispatch])
 
 	return (
 		<>
@@ -96,7 +105,14 @@ const LeftSide = () => {
 									<div key={user._id} className={`message-user ${isActive(user)}`}
 										onClick={() => handleAddUser(user)}>
 										<UserCard user={user} msg={true}>
-											<i className="fas fa-circle" />
+											{
+												user.online
+													? <i className="fas fa-circle text-success" />
+													: auth.user.following.find(item =>
+														item._id === user._id
+													) && <i className="fas fa-circle" />
+											}
+
 										</UserCard>
 									</div>
 								))

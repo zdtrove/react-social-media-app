@@ -4,10 +4,11 @@ import PostThumb from '../PostThumb'
 import LoadIcon from '../../images/loading.gif'
 import { getDataAPI } from '../../utils/fetchData'
 import { GLOBAL_TYPES } from '../../redux/actions/globalTypes'
+import { ITEM_PER_PAGE } from '../../utils/config'
 
 const Saved = ({ auth, dispatch }) => {
     const [savedPosts, setSavedPosts] = useState([])
-    const [result, setResult] = useState(9)
+    const [result, setResult] = useState(ITEM_PER_PAGE)
     const [page, setPage] = useState(2)
     const [load, setLoad] = useState(false)
 
@@ -27,7 +28,7 @@ const Saved = ({ auth, dispatch }) => {
 
     const handleLoadMore = async () => {
         setLoad(true)
-        const res = await getDataAPI(`getSavedPosts?limit=${page * 9}`, auth.token)
+        const res = await getDataAPI(`getSavedPosts?limit=${page * ITEM_PER_PAGE}`, auth.token)
         setSavedPosts(res.data.savedPosts)
         setResult(res.data.result)
         setPage(page + 1)

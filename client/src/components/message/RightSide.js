@@ -1,27 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react'
 import UserCard from '../UserCard'
 import { useSelector, useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import MsgDisplay from './MsgDisplay'
 import Icons from '../Icons'
 import { GLOBAL_TYPES } from '../../redux/actions/globalTypes'
 import { imageShow, videoShow } from '../../utils/mediaShow'
 import { imageUpload } from '../../utils/imageUpload'
-import { addMessage, getMessages, MESS_TYPES } from '../../redux/actions/messageAction'
+import { addMessage, deleteConversation, getMessages, loadMoreMessages } from '../../redux/actions/messageAction'
 import LoadIcon from '../../images/loading.gif'
+import { ITEM_PER_PAGE } from '../../utils/config'
 
 const RightSide = () => {
 	const { auth, message, theme, socket } = useSelector(state => state)
 	const dispatch = useDispatch()
+	const history = useHistory()
 	const { id } = useParams()
+	const refDisplay = useRef()
+	const pageEnd = useRef()
 	const [user, setUser] = useState([])
 	const [text, setText] = useState('')
 	const [media, setMedia] = useState([])
 	const [loadMedia, setLoadMedia] = useState(false)
 	const [page, setPage] = useState(0)
 	const [data, setData] = useState([])
-	const refDisplay = useRef()
-	const pageEnd = useRef()
+	const [result, setResult] = useState(ITEM_PER_PAGE)
+	const [isLoadMore, setIsLoadMore] = useState(0)
 
 	const handleChangeMedia = e => {
 		const files = [...e.target.files]
@@ -66,64 +70,72 @@ const RightSide = () => {
 		}
 	}
 
-	useEffect(() => {
-		const newData = message.data.filter(item => 
-			item.sender === auth.user._id || item.sender === id
-		)
-		setData(newData)
-	}, [message.data, auth.user._id, id])
+	const handleDeleteConversation = () => {
+		dispatch(deleteConversation({ auth, id }))
+		return history.push('/message')
+	}
 
 	useEffect(() => {
-		const newUser = message.users.find(user => user._id === id)
-		if (newUser) setUser(newUser)
+		const newData = message.data.find(item => item._id === id)
+		if (newData) {
+			setData(newData.messages)
+			setResult(newData.result)
+			setPage(newData.page)
+		}
+	}, [message.data, id])
+
+	useEffect(() => {
+		if (id && message.users.length > 0) {
+			setTimeout(() => {
+				refDisplay.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+			}, 50)
+			const newUser = message.users.find(user => user._id === id)
+			if (newUser) setUser(newUser)
+		}
 	}, [message.users, id])
 
 	// Load More
 	useEffect(() => {
 		const observer = new IntersectionObserver(entries => {
 			if (entries[0].isIntersecting) {
-				setPage(p => p + 1)
+				setIsLoadMore(p => p + 1)
 			}
 		}, {
 			threshold: 0.1
 		})
 
 		observer.observe(pageEnd.current)
-	}, [setPage])
+	}, [setIsLoadMore])
 
 	useEffect(() => {
-		if (message.resultData >= (page - 1) * 9 && page > 1) {
-			dispatch(getMessages({ auth, id, page }))
-		}
-	}, [message.resultData, page, id, auth, dispatch])
-
-	useEffect(() => {
-		if (refDisplay.current) {
-			refDisplay.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
-		}
-	}, [text])
-
-	useEffect(() => {
-		if (id) {
-			const getMessagesData = async () => {
-				dispatch({ type: MESS_TYPES.GET_MESSAGES, payload: { messages: [] } })
-				setPage(1)
-				await dispatch(getMessages({ auth, id }))
-				if (refDisplay.current) {
-					refDisplay.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
-				}
+		if (isLoadMore > 1) {
+			if (result >= page * ITEM_PER_PAGE) {
+				dispatch(loadMoreMessages({ auth, id, page: page + 1 }))
+				setIsLoadMore(1)
 			}
-
-			getMessagesData()
 		}
-	}, [id, dispatch, auth])
+		// eslint-disable-next-line
+	}, [isLoadMore])
+
+	useEffect(() => {
+		const getMessagesData = async () => {
+			if (message.data.every(item => item._id !== id)) {
+				await dispatch(getMessages({ auth, id }))
+				setTimeout(() => {
+					refDisplay.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+				}, 50)
+			}
+		}
+		getMessagesData()
+	}, [id, dispatch, auth, message.data])
 
 	return <>
-		<div className="message__header">
+		<div className="message__header" style={{ cursor: 'pointer' }}>
 			{
 				user.length !== 0 &&
 				<UserCard user={user}>
-					<i className="fas fa-trash text-danger" />
+					<i className="fas fa-trash text-danger"
+						onClick={handleDeleteConversation} />
 				</UserCard>
 			}
 
@@ -146,7 +158,7 @@ const RightSide = () => {
 							{
 								msg.sender === auth.user._id &&
 								<div className="chat-row your-message">
-									<MsgDisplay msg={msg} theme={theme} user={auth.user} />
+									<MsgDisplay msg={msg} theme={theme} user={auth.user} data={data} />
 								</div>
 							}
 						</div>

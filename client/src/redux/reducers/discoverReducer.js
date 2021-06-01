@@ -1,9 +1,10 @@
+import { ITEM_PER_PAGE } from "../../utils/config"
 import { DISCOVER_TYPES } from "../actions/discoverAction"
 
 const initialState = {
     loading: false,
     posts: [],
-    result: 9,
+    result: ITEM_PER_PAGE,
     page: 2,
     firstLoad: false
 }

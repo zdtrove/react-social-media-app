@@ -5,6 +5,7 @@ import LoadIcon from '../images/loading.gif'
 import PostThumb from '../components/PostThumb'
 import LoadMoreBtn from '../components/LoadMoreBtn'
 import { getDataAPI } from '../utils/fetchData'
+import { ITEM_PER_PAGE } from '../utils/config'
 
 const Discover = () => {
 	const { auth, discover } = useSelector(state => state)
@@ -19,7 +20,7 @@ const Discover = () => {
 
 	const handleLoadMore = async () => {
 		setLoad(true)
-		const res = await getDataAPI(`post_discover?num=${discover.page * 9}`, auth.token)
+		const res = await getDataAPI(`post_discover?num=${discover.page * ITEM_PER_PAGE}`, auth.token)
 		dispatch({ type: DISCOVER_TYPES.UPDATE_POST, payload: res.data })
 		setLoad(false)
 	}
