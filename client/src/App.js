@@ -16,9 +16,11 @@ import io from 'socket.io-client'
 import { GLOBAL_TYPES } from './redux/actions/globalTypes'
 import SocketClient from './SocketClient'
 import { getNotifies } from './redux/actions/notifyAction'
+import CallModal from './components/message/CallModal'
+import Peer from 'peerjs'
 
 function App() {
-  const { auth, status, modal } = useSelector(state => state)
+  const { auth, status, modal, call } = useSelector(state => state)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -48,6 +50,14 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    const newPeer = new Peer(undefined, {
+      host: '/', port: '3001'
+    })
+    
+    dispatch({ type: GLOBAL_TYPES.PEER, payload: newPeer })
+  }, [dispatch])
+
   return (
     <Router>
       <Alert />
@@ -57,6 +67,7 @@ function App() {
           {auth.token && <Header />}
           {status && <StatusModal />}
           {auth.token && <SocketClient />}
+          {call && <CallModal />}
           <Route exact path="/" component={auth.token ? Home : Login} />
           <Route exact path="/register" component={Register} />
           <div className="wrap-page">

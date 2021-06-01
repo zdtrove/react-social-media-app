@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const SocketServer = require('./socketServer')
+const { PeerServer } = require('peer')
 
 const app = express()
 app.use(express.json())
@@ -18,6 +19,9 @@ const users = []
 io.on('connection', socket => {
 	SocketServer(socket)
 })
+
+// Create peer server
+PeerServer({ port: 3001, path: '/' })
 
 // Routes
 app.use('/api', require('./routes/authRouter'))

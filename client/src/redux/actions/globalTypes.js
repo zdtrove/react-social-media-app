@@ -6,7 +6,9 @@ export const GLOBAL_TYPES = {
 	MODAL: 'MODAL',
 	SOCKET: 'SOCKET',
 	ONLINE: 'ONLINE',
-	OFFLINE: 'OFFLINE'
+	OFFLINE: 'OFFLINE',
+	CALL: 'CALL',
+	PEER: 'PEER'
 }
 
 export const EditData = (data, id, post) => {
