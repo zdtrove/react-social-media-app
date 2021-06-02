@@ -52,7 +52,7 @@ function App() {
 
   useEffect(() => {
     const newPeer = new Peer(undefined, {
-      host: '/', port: '3001'
+      host: '/', port: '443'
     })
     
     dispatch({ type: GLOBAL_TYPES.PEER, payload: newPeer })

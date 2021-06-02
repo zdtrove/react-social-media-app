@@ -149,14 +149,14 @@ const SocketClient = () => {
 			dispatch({ type: GLOBAL_TYPES.CALL, payload: data })
 		})
 		return () => socket.off('callUserToClient')
-	}, [socket])
+	}, [socket, dispatch])
 
 	useEffect(() => {
 		socket.on('userBusy', data => {
 			dispatch({ type: GLOBAL_TYPES.ALERT, payload: {error: `${call.username} is busy`} })
 		})
 		return () => socket.off('userBusy')
-	}, [socket, call])
+	}, [socket, call, dispatch])
 
 	return <>
 		<audio controls ref={audioRef} style={{ display: 'none' }}>
