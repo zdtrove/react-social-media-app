@@ -44,9 +44,11 @@ const LeftSide = () => {
 		return '';
 	}
 
-	useEffect(() => {
+	useEffect(async () => {
 		if (message.firstLoad) return;
-		dispatch(getConversations({ auth }))
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: true } })
+		await dispatch(getConversations({ auth }))
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
 	}, [dispatch, auth, message.firstLoad])
 
 	// Load More
