@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { login } from '../redux/actions/authAction'
 import { useDispatch, useSelector } from 'react-redux'
+import { inputLengthClass } from '../utils/functions'
 
 const Login = () => {
 	const { auth } = useSelector(state => state)
@@ -11,6 +12,7 @@ const Login = () => {
 	const [typePass, setTypePass] = useState(false)
 	const dispatch = useDispatch()
 	const history = useHistory()
+	console.log(password)
 
 	useEffect(() => {
 		if (auth.token) history.push('/')
@@ -19,6 +21,7 @@ const Login = () => {
 	const handleChangeInput = e => {
 		const { name, value } = e.target
 		setUserData({ ...userData, [name]: value })
+		console.log(password)
 	}
 
 	const handleSubmit = e => {
@@ -33,36 +36,40 @@ const Login = () => {
 					<div className="content">
 						<div className="image-login"></div>
 						<div className="field">
-							<span className="fa fa-user"></span>
+							<span className="fas fa-envelope"></span>
 							<input
-								required
+								maxLength="32"
 								placeholder="Email"
 								type="email"
 								name="email"
 								value={email}
 								onChange={handleChangeInput}
 							/>
+							<small style={{ transform: 'translate(-5px, -2px)' }}>
+								{email && <span className={inputLengthClass(email.length, 20, 28)}>
+									{email.length}/32
+								</span>}
+							</small>
 						</div>
 						<div className="field space">
 							<span className="fa fa-lock"></span>
 							<input
+								maxLength="24"
 								className="pass-key"
-								required
 								placeholder="Password"
 								type={typePass ? "text" : "password"}
 								name="password"
 								value={password}
 								onChange={handleChangeInput}
 							/>
-							<span onClick={() => setTypePass(!typePass)} className="show">
-								{typePass ? 'Hide' : 'Show'}
+							<span onClick={() => setTypePass(!typePass)} className="show text-success">
+								{password && (typePass ? 'Hide' : 'Show')}
 							</span>
 						</div>
-						<hr />
+						<br />
 						<div className="field">
 							<input disabled={email && password ? false : true} className="submit" type="submit" value="LOGIN" />
 						</div>
-						<div className="login">Or login with</div>
 						<div className="links">
 							<div className="facebook">
 								<i className="fab fa-facebook-f"><span>Facebook</span></i>
