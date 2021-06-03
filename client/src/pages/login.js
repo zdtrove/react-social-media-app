@@ -79,7 +79,7 @@ const Login = () => {
 							</div>
 						</div>
 						<div className="signup">
-							You don't have an account? <Link style={{ color: "crimson" }} to="/register">Register Now</Link>
+							You don't have an account? <Link className="text-warning" to="/register">Register Now</Link>
 						</div>
 					</div>
 				</div>

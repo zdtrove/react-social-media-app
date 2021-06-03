@@ -51,7 +51,7 @@
         }
         input {
           height: 100%;
-          width: 238px;
+          width: 230px;
           background: transparent;
           border: none;
           outline: none;
@@ -60,7 +60,8 @@
           font-family: "Poppins", sans-serif;
           border-top-right-radius: 5px;
           border-bottom-right-radius: 5px;
-          padding: 10px;
+          padding: 5px;
+          padding-left: 0;
           &::-webkit-input-placeholder {
             color: rgb(99, 84, 84);
             font-size: 12px;
@@ -163,9 +164,6 @@
       a {
         color: #3498db;
         text-decoration: none;
-        &:hover {
-          text-decoration: underline;
-        }
       }
     }
   }
@@ -178,16 +176,31 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px #3f51b554 inset !important;
 }
 
-@media (max-width: 766px) {
+@media (max-width: 768px) {
   .auth-page {
     .bg-img {
-      padding: 10px;
+      padding: 12px;
       height: 100vh;
       .content {
-        width: 90%;
+        width: 100%;
         max-width: 350px;
         padding: 30px 20px;
         padding-top: 70px;
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .auth-page {
+    .bg-img {
+      .content {
+        padding: 30px 10px;
+        .field {
+          input {
+            width: 180px;
+          }
+        }
       }
     }
   }
