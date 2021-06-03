@@ -54,7 +54,7 @@
   }
   .other-video {
     width: 100%;
-    height: 100%;
+    height: 100vh;
   }
   .your-video {
     position: absolute;
@@ -63,7 +63,7 @@
     width: 300px;
     max-height: 250px;
     border-radius: 5px;
-    border: 1px solid crimson;
+    border: 1px solid #fff;
     z-index: 10;
   }
   .end-call {
@@ -86,5 +86,18 @@
     left: 50%;
     transform: translateX(-50%);
     color: white;
+  }
+}
+
+@media (max-width: 766px) {
+  .call-modal {
+    .show-video {
+      .your-video {
+        top: 20px;
+        right: 20px;
+        width: 150px;
+        height: 110px
+      }
+    }
   }
 }
