@@ -95,6 +95,13 @@
           background: transparent;
         }
       }
+      &.register {
+        .image-login {
+          &:after {
+            background: url("/images/register.png") no-repeat center / cover;
+          }
+        }
+      }
     }
     .login {
       color: white;

@@ -43,114 +43,114 @@ const Register = () => {
 
 	return (
 		<div className="auth-page">
-			<form onSubmit={handleSubmit}>
-				<h3 className="mb-4 text-center text-uppercase">Social Media App</h3>
-				<div className="form-group">
-					<label htmlFor="fullname">Full Name</label>
-					<input
-						type="text"
-						className="form-control"
-						id="fullname"
-						name="fullname"
-						value={fullname}
-						onChange={handleChangeInput}
-						style={{ background: `${alert.fullname ? '#fd2d6a14' : ''}` }}
-					/>
-					<small className="form-text text-danger">
-						{alert.fullname ? alert.fullname : ''}
-					</small>
+			<div className="bg-img">
+				<div className="content register">
+					<div className="image-login"></div>
+					<form onSubmit={handleSubmit}>
+						<div className="field">
+							<span className="fas fa-file-signature"></span>
+							<input
+								required
+								placeholder="Name"
+								type="text"
+								name="fullname"
+								value={fullname}
+								onChange={handleChangeInput}
+								style={{ background: `${alert.fullname ? '#fd2d6a14' : ''}` }}
+							/>
+							<small className="form-text text-danger">
+								{alert.fullname ? alert.fullname : ''}
+							</small>
+						</div>
+						<div className="field">
+							<span className="fas fa-file-signature"></span>
+							<input
+								required
+								placeholder="Username"
+								type="text"
+								name="username"
+								value={username.toLowerCase().replace(/ /g, '')}
+								onChange={handleChangeInput}
+								style={{ background: `${alert.username ? '#fd2d6a14' : ''}` }}
+							/>
+							<small className="form-text text-danger">
+								{alert.username ? alert.username : ''}
+							</small>
+						</div>
+						<div className="field">
+							<span className="fas fa-envelope"></span>
+							<input
+								required
+								placeholder="Email"
+								type="text"
+								name="email"
+								value={email}
+								onChange={handleChangeInput}
+								style={{ background: `${alert.email ? '#fd2d6a14' : ''}` }}
+							/>
+							<small className="form-text text-danger">
+								{alert.email ? alert.email : ''}
+							</small>
+						</div>
+						<div className="field space">
+							<span className="fa fa-lock"></span>
+							<input
+								className="pass-key"
+								required
+								placeholder="Password"
+								type={typePass ? "text" : "password"}
+								name="password"
+								value={password}
+								onChange={handleChangeInput}
+							/>
+							<span onClick={() => setTypePass(!typePass)} className="show">
+								{typePass ? 'Hide' : 'Show'}
+							</span>
+							<small className="form-text text-danger">
+								{alert.password ? alert.password : ''}
+							</small>
+						</div>
+						<div className="field space">
+							<span className="fa fa-lock"></span>
+							<input
+								className="pass-key"
+								required
+								placeholder="Password Confirm"
+								type={typePass ? "text" : "password"}
+								name="cf_password"
+								value={cf_password}
+								onChange={handleChangeInput}
+							/>
+							<span onClick={() => setTypePass(!typePass)} className="show">
+								{typePass ? 'Hide' : 'Show'}
+							</span>
+							<small className="form-text text-danger">
+								{alert.cf_password ? alert.cf_password : ''}
+							</small>
+						</div>
+						<div className="radio">
+							<div className="mx-0 mb-1 row justify-content-between">
+								<label htmlFor="male">
+									<span>Male:</span> <input type="radio" id="male" name="gender" value="male" defaultChecked onChange={handleChangeInput} />
+								</label>
+								<label htmlFor="female">
+									Female: <input type="radio" id="female" name="gender" value="female" onChange={handleChangeInput} />
+								</label>
+								<label htmlFor="other">
+									Other: <input type="radio" id="other" name="gender" value="other" onChange={handleChangeInput} />
+								</label>
+							</div>
+						</div>
+						<hr />
+						<div className="field">
+							<input className="submit" type="submit" value="REGISTER" />
+						</div>
+						<div className="signup">
+							Already have an account? <Link style={{ color: "crimson" }} to="/">Login Now</Link>
+						</div>
+					</form>
 				</div>
-				<div className="form-group">
-					<label htmlFor="username">User Name</label>
-					<input
-						type="text"
-						className="form-control"
-						id="username"
-						name="username"
-						value={username.toLowerCase().replace(/ /g, '')}
-						onChange={handleChangeInput}
-						style={{ background: `${alert.username ? '#fd2d6a14' : ''}` }}
-					/>
-					<small className="form-text text-danger">
-						{alert.username ? alert.username : ''}
-					</small>
-				</div>
-				<div className="form-group">
-					<label htmlFor="exampleInputEmail1">Email address</label>
-					<input
-						type="email"
-						className="form-control"
-						id="exampleInputEmail1"
-						name="email"
-						value={email}
-						onChange={handleChangeInput}
-						style={{ background: `${alert.email ? '#fd2d6a14' : ''}` }}
-					/>
-					<small className="form-text text-danger">
-						{alert.email ? alert.email : ''}
-					</small>
-					<small className="form-text text-muted">
-						We'll never share your email with anyone else.
-					</small>
-				</div>
-				<div className="form-group">
-					<label htmlFor="exampleInputPassword1">Password</label>
-					<div className="pass">
-						<input
-							type={typePass ? "text" : "password"}
-							className="form-control"
-							id="exampleInputPassword1"
-							name="password"
-							value={password}
-							onChange={handleChangeInput}
-							style={{ background: `${alert.password ? '#fd2d6a14' : ''}` }}
-						/>
-						<small onClick={() => setTypePass(!typePass)}>
-							{typePass ? 'Hide' : 'Show'}
-						</small>
-					</div>
-					<small className="form-text text-danger">
-						{alert.password ? alert.password : ''}
-					</small>
-				</div>
-				<div className="form-group">
-					<label htmlFor="cf_password">Confirm Password</label>
-					<div className="pass">
-						<input
-							type={typeCfPass ? "text" : "password"}
-							className="form-control"
-							id="cf_password"
-							name="cf_password"
-							value={cf_password}
-							onChange={handleChangeInput}
-							style={{ background: `${alert.cf_password ? '#fd2d6a14' : ''}` }}
-						/>
-						<small onClick={() => setTypeCfPass(!typeCfPass)}>
-							{typeCfPass ? 'Hide' : 'Show'}
-						</small>
-					</div>
-					<small className="form-text text-danger">
-						{alert.cf_password ? alert.cf_password : ''}
-					</small>
-				</div>
-				<div className="mx-0 mb-1 row justify-content-between">
-					<label htmlFor="male">
-						Male: <input type="radio" id="male" name="gender" value="male" defaultChecked onChange={handleChangeInput} />
-					</label>
-					<label htmlFor="female">
-						Female: <input type="radio" id="female" name="gender" value="female" onChange={handleChangeInput} />
-					</label>
-					<label htmlFor="other">
-						Other: <input type="radio" id="other" name="gender" value="other" onChange={handleChangeInput} />
-					</label>
-				</div>
-				<button type="submit" className="btn btn-dark w-100">
-					Register
-				</button>
-				<p className="my-2">
-					Already have an account? <Link style={{ color: "crimson" }} to="/">Login Now</Link>
-				</p>
-			</form>
+			</div>
 		</div>
 	)
 }
