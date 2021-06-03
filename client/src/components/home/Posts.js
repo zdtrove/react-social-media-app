@@ -13,14 +13,14 @@ const Posts = () => {
     const [load, setLoad] = useState(false)
 
     const handleLoadMore = async () => {
-		setLoad(true)
-		const res = await getDataAPI(`posts?limit=${homePosts.page * ITEM_PER_PAGE}`, auth.token)
-		dispatch({ 
-			type: POST_TYPES.GET_POSTS, 
-			payload: {...res.data, page: homePosts.page + 1}
-		})
-		setLoad(false)
-	}
+        setLoad(true)
+        const res = await getDataAPI(`posts?limit=${homePosts.page * ITEM_PER_PAGE}`, auth.token)
+        dispatch({
+            type: POST_TYPES.GET_POSTS,
+            payload: { ...res.data, page: homePosts.page + 1 }
+        })
+        setLoad(false)
+    }
 
     return (
         <div className="posts">
@@ -28,10 +28,10 @@ const Posts = () => {
                 <PostCard theme={theme} key={post._id} post={post} />
             ))}
             {
-				load && <img src={LoadIcon} alt="Loading" className="mx-auto my-4 d-block" />
-			}
+                load && <img src={LoadIcon} alt="Loading" className="mx-auto my-4 d-block" />
+            }
 
-			<LoadMoreBtn result={homePosts.result} page={homePosts.page} load={load} handleLoadMore={handleLoadMore} />
+            <LoadMoreBtn result={homePosts.result} page={homePosts.page} load={load} handleLoadMore={handleLoadMore} />
         </div>
     )
 }

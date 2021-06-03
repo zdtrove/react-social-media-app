@@ -18,16 +18,16 @@ const NotifyModal = () => {
 		dispatch({ type: NOTIFY_TYPES.UPDATE_SOUND, payload: !notify.sound })
 	}
 
-    const handleDeleteAll = () => {
-        const newArr = notify.data.filter(item => item.isRead === false)
-        if (newArr.length === 0) return dispatch(deleteAllNotifies(auth.token))
-        if (window.confirm(`You have ${newArr.length} unread notices. Are you sure you want to delete all?`)) {
-            return dispatch(deleteAllNotifies(auth.token))
-        }   
-    }
+	const handleDeleteAll = () => {
+		const newArr = notify.data.filter(item => item.isRead === false)
+		if (newArr.length === 0) return dispatch(deleteAllNotifies(auth.token))
+		if (window.confirm(`You have ${newArr.length} unread notices. Are you sure you want to delete all?`)) {
+			return dispatch(deleteAllNotifies(auth.token))
+		}
+	}
 
 	return (
-		<div style={{ minWidth: '280px' }}>
+		<div style={{ minWidth: '300px' }}>
 			<div className="d-flex justify-content-between align-items-center px-3">
 				<h3>Notification</h3>
 				{
@@ -63,9 +63,16 @@ const NotifyModal = () => {
 									</div>
 									{msg.content && <small>{msg.content.slice(0, 20)}...</small>}
 								</div>
-								<div style={{ width: '30px' }}>
-									{msg.image && <Avatar src={msg.image} size="medium" />}
-								</div>
+								{
+									msg.image &&
+									<div style={{ width: '30px' }}>
+										{
+											msg.image.match(/video/i)
+												? <video src={msg.image} width="100%" />
+												: <Avatar src={msg.image} size="medium" />
+										}
+									</div>
+								}
 							</Link>
 							<small className="text-muted d-flex justify-content-between px-2 align-items-center">
 								{moment(msg.createdAt).fromNow()}
@@ -79,7 +86,7 @@ const NotifyModal = () => {
 			</div>
 			<hr className="my-1" />
 			<div className="text-right text-danger mr-2" style={{ cursor: 'pointer' }}
-            onClick={handleDeleteAll}>
+				onClick={handleDeleteAll}>
 				Delete All
             </div>
 		</div>
