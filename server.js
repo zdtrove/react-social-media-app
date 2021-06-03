@@ -40,7 +40,7 @@ mongoose.connect(URI, {
 	useUnifiedTopology: true
 }, err => {
 	if (err) throw err
-	console.log('Connected to mongodb')
+	console.log('Connected to mongodb.')
 })
 
 if (process.env.NODE_ENV === 'production') {
