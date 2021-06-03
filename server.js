@@ -4,7 +4,8 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const SocketServer = require('./socketServer')
-const { PeerServer } = require('peer')
+const { ExpressPeerServer } = require('peer')
+const path = require('path')
 
 const app = express()
 app.use(express.json())
@@ -21,7 +22,7 @@ io.on('connection', socket => {
 })
 
 // Create peer server
-PeerServer({ port: 443, path: '/' })
+ExpressPeerServer(http, { path: '/' })
 
 // Routes
 app.use('/api', require('./routes/authRouter'))
@@ -41,6 +42,13 @@ mongoose.connect(URI, {
 	if (err) throw err
 	console.log('Connected to mongodb')
 })
+
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static('client/build'))
+	app.get('*', (req, res) => {
+		res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
+	})
+}
 
 const port = process.env.PORT || 5000
 http.listen(port, () => {

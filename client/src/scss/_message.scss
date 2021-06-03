@@ -120,6 +120,9 @@
         opacity: 0;
       }
     }
+    .dropdown-menu {
+      transform: translate3d(-113px, -200px, 0px) !important;
+    }
   }
   &__chatContainer {
     width: 100%;

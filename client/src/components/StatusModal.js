@@ -108,34 +108,34 @@ const StatusModal = () => {
                         placeholder={`${auth.user.username}, what are you thinking?`}
                         value={content}
                         onChange={e => setContent(e.target.value)}
-                        style={{ 
+                        style={{
                             filter: theme ? 'invert(1)' : 'invert(0)',
                             color: theme ? 'white' : '#111',
                             background: theme ? 'rgba(0,0,0,.03)' : ''
                         }}
                     />
                     <div className="d-flex">
-                        <div className="flet-fill"></div>
+                        <div className="flex-fill"></div>
                         <Icons setContent={setContent} content={content} theme={theme} />
                     </div>
                     <div className="show-images">
                         {images.map((img, index) => (
                             <div key={index} id="file-img">
                                 {
-                                    img.camera 
+                                    img.camera
                                         ? imageShow(img.camera, theme)
                                         : img.url
                                             ? <>
                                                 {
                                                     img.url.match(/video/i)
-                                                        ? videoShow(img.url, theme) 
+                                                        ? videoShow(img.url, theme)
                                                         : imageShow(img.url, theme)
                                                 }
                                             </>
                                             : <>
                                                 {
                                                     img.type.match(/video/i)
-                                                        ? videoShow(URL.createObjectURL(img), theme) 
+                                                        ? videoShow(URL.createObjectURL(img), theme)
                                                         : imageShow(URL.createObjectURL(img), theme)
                                                 }
                                             </>
@@ -166,12 +166,12 @@ const StatusModal = () => {
                                     <i onClick={handleStream} className="fas fa-camera" />
                                     <div className="file-upload">
                                         <i className="fas fa-image" />
-                                        <input 
-                                            onChange={handleChangeImage} 
-                                            type="file" 
-                                            name="file" 
-                                            id="file" 
-                                            multiple accept="image/*,video/*" 
+                                        <input
+                                            onChange={handleChangeImage}
+                                            type="file"
+                                            name="file"
+                                            id="file"
+                                            multiple accept="image/*,video/*"
                                         />
                                     </div>
                                 </>

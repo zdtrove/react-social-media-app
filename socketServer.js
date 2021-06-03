@@ -1,7 +1,7 @@
 let users = []
 const EditData = (data, id, call) => {
-	const newData = data.map(item => 
-		item.id === id ? {...item, call} : item
+	const newData = data.map(item =>
+		item.id === id ? { ...item, call } : item
 	)
 	return newData
 }
@@ -88,21 +88,13 @@ const SocketServer = socket => {
 
 	// Notification
 	socket.on('createNotify', msg => {
-		const clients = users.filter(user => msg.recipients.includes(user.id))
-		if (clients.length > 0) {
-			clients.forEach(client => {
-				socket.to(`${client.socketId}`).emit('createNotifyToClient', msg)
-			})
-		}
+		const client = users.find(user => msg.recipients.includes(user.id))
+		client && socket.to(`${client.socketId}`).emit('createNotifyToClient', msg)
 	})
 
 	socket.on('removeNotify', msg => {
-		const clients = users.filter(user => msg.recipients.includes(user.id))
-		if (clients.length > 0) {
-			clients.forEach(client => {
-				socket.to(`${client.socketId}`).emit('removeNotifyToClient', msg)
-			})
-		}
+		const client = users.find(user => msg.recipients.includes(user.id))
+		client && socket.to(`${client.socketId}`).emit('removeNotifyToClient', msg)
 	})
 
 	// Message
@@ -155,7 +147,7 @@ const SocketServer = socket => {
 				users = EditData(users, client.call, null)
 			}
 		}
-	})	
+	})
 }
 
 module.exports = SocketServer

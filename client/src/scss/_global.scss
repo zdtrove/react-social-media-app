@@ -46,8 +46,15 @@ img {
   overflow: hidden;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 766px) {
   .message {
-    height: calc(100vh - 150px);
+    height: calc(100vh - 100px);
+    .right-message,
+    .left-message {
+      display: none;
+    }
+  }
+  .status {
+    padding: 20px 10px;
   }
 }

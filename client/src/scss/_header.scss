@@ -93,37 +93,23 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 766px) {
   .header {
     .navbar {
       .menu {
-        position: absolute;
-        top: calc(100vh - 50px);
-        left: 0;
         width: 100%;
-        height: 50px;
-        box-shadow: 0 0 10px #ddd;
-        z-index: 2;
-        background: #f8f9fa;
+        height: 40px;
         .navbar-nav {
           display: flex;
           justify-content: space-around;
           align-items: center;
-        }
-        .dropdown-menu {
-          bottom: 100%;
-          top: auto;
         }
       }
       .search-form {
         width: 100%;
       }
       .logo {
-        margin: auto;
-        font-size: 1rem;
-        h1 {
-          font-size: 1.5rem;
-        }
+        display: none;
       }
     }
   }

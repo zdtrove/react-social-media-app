@@ -31,7 +31,7 @@ const newlogin = () => {
                         </div>
                     </div>
                     <div className="signup">Don't have account? {' '}
-                        <a href="#">Signup Now</a>
+                        <a href="/register">Signup Now</a>
                     </div>
                 </div>
             </div>
