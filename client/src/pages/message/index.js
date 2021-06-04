@@ -1,5 +1,6 @@
 import React from 'react'
 import LeftSide from '../../components/message/LeftSide'
+import Messenger from '../../images/messenger.png'
 
 const Message = () => {
 	return (
@@ -9,8 +10,7 @@ const Message = () => {
 			</div>
 			<div className="px-0 col-md-8 right-message">
 				<div className="d-flex justify-content-center align-items-center flex-column h-100">
-					<i className="fab fa-facebook-messenger text-primary"
-						style={{ fontSize: '5rem' }} />
+					<img src={Messenger} alt="messenger" />
 					<h4>Messenger</h4>
 				</div>
 			</div>

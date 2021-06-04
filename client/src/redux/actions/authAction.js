@@ -20,7 +20,7 @@ export const login = data => async dispatch => {
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
@@ -42,7 +42,7 @@ export const refreshToken = () => async dispatch => {
             })
             dispatch({ type: GLOBAL_TYPES.ALERT, payload: {} })
         } catch (err) {
-            toast.error(err.response.data.msg, {
+            toast.dark(err.response.data.msg, {
                 position: toast.POSITION.TOP_LEFT
             })
             dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: true } })
@@ -71,7 +71,7 @@ export const register = data => async dispatch => {
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
@@ -84,7 +84,7 @@ export const logout = () => async dispatch => {
         await postDataAPI('logout')
         window.location.href = "/"
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })

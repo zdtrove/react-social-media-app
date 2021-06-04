@@ -30,7 +30,7 @@ code {
   min-height: 100vh;
   background: white;
   .main {
-    // max-width: 1000px;
+    max-width: 1000px;
     width: 100%;
     margin: auto;
   }
@@ -55,8 +55,12 @@ img {
 }
 
 .Toastify__progress-bar {
-  background-color: #ffeb3b !important;
   height: 3px !important;
+  background: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55) !important;
+}
+
+.Toastify__close-button:focus {
+  outline: none !important;
 }
 
 @media (max-width: 766px) {

@@ -19,6 +19,9 @@
         &.active {
           opacity: 1;
         }
+        &:hover {
+          opacity: 1;
+        }
       }
       .material-icons {
         font-size: 30px;
@@ -31,14 +34,35 @@
       label {
         cursor: pointer;
       }
+      .notify-img {
+        img {
+          opacity: 0.5;
+          &:hover {
+            opacity: 1;
+          }
+        }
+        span {
+          transition: all 0.3s;
+        }
+        &:hover span {
+          width: 22px;
+          height: 22px;
+          font-size: 13px;
+        }
+      }
       .notify-length {
         position: absolute;
         top: 45%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(10%, -75%);
         color: white;
         font-weight: bold;
-        font-size: 10px;
+        font-size: 11px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        text-align: center;
+        background: crimson;
       }
     }
     .search-form {

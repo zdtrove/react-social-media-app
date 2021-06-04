@@ -22,7 +22,7 @@ export const createNotify = ({ msg, auth, socket }) => async dispatch => {
             }
         })
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
@@ -34,7 +34,7 @@ export const removeNotify = ({ msg, auth, socket }) => async dispatch => {
         await deleteDataAPI(`notify/${msg.id}?url=${msg.url}`, auth.token)
         socket.emit('removeNotify', msg)
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
@@ -46,7 +46,7 @@ export const getNotifies = token => async dispatch => {
         const res = await getDataAPI('notifies', token)
         dispatch({ type: NOTIFY_TYPES.GET_NOTIFIES, payload: res.data.notifies })
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
@@ -58,7 +58,7 @@ export const isReadNotify = ({ msg, auth }) => async dispatch => {
     try {
         await patchDataAPI(`/isReadNotify/${msg._id}`, null, auth.token)
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
@@ -70,7 +70,7 @@ export const deleteAllNotifies = token => async dispatch => {
     try {
         await deleteDataAPI('deleteAllNotifies', token)
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })

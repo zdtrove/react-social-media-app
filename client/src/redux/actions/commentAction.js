@@ -29,7 +29,7 @@ export const createComment = (post, newComment, auth, socket) => async dispatch 
         }
         dispatch(createNotify({ msg, auth, socket }))
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
@@ -43,7 +43,7 @@ export const updateComment = ({ comment, post, content, auth }) => async dispatc
     try {
         await patchDataAPI(`comment/${comment._id}`, { content }, auth.token)
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
@@ -59,7 +59,7 @@ export const likeComment = ({ comment, post, auth }) => async dispatch => {
     try {
         await patchDataAPI(`comment/${comment._id}/like`, null, auth.token)
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
@@ -75,7 +75,7 @@ export const unLikeComment = ({ comment, post, auth }) => async dispatch => {
     try {
         await patchDataAPI(`comment/${comment._id}/unlike`, null, auth.token)
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
@@ -103,7 +103,7 @@ export const deleteComment = ({ post, comment, auth, socket }) => async dispatch
             dispatch(removeNotify({ msg, auth, socket }))
         })
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import Send from '../../../images/send.svg'
 import { likePost, unLikePost, savedPost, unSavedPost } from '../../../redux/actions/postAction'
 import LikeButton from '../../LikeButton'
 import ShareModal from '../../ShareModal'
 import { BASE_URL } from '../../../utils/config'
+import MessageIcon from '../../../images/message.png'
+import ShareIcon from '../../../images/share.png'
 
 const CardFooter = ({ post }) => {
 	const { auth, theme, socket } = useSelector(state => state)
@@ -71,9 +72,9 @@ const CardFooter = ({ post }) => {
 						handleUnLike={handleUnLike}
 					/>
 					<Link to={`/post/${post._id}`} className="text-dark">
-						<i className="far fa-comment" />
+						<img className="mx-3" src={MessageIcon} alt="message" />
 					</Link>
-					<img onClick={() => setIsShare(!isShare)} src={Send} alt="Send" />
+					<img className="mr-3" style={{ width: '25px', height: '25px' }} onClick={() => setIsShare(!isShare)} src={ShareIcon} alt="share" />
 				</div>
 				{
 					saved

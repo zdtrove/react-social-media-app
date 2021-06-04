@@ -14,7 +14,7 @@ export const getSuggestions = token => async dispatch => {
         dispatch({ type: SUGGES_TYPES.GET_USERS_SUGGES, payload: res.data })
         dispatch({ type: SUGGES_TYPES.LOADING_SUGGES, payload: false })
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })

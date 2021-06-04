@@ -15,7 +15,7 @@ export const getDiscoverPosts = token => async dispatch => {
         dispatch({ type: DISCOVER_TYPES.GET_DISCOVER_POSTS, payload: res.data })
         dispatch({ type: DISCOVER_TYPES.LOADING_DISCOVER, payload: false })
     } catch (err) {
-        toast.error(err.response.data.msg, {
+        toast.dark(err.response.data.msg, {
             position: toast.POSITION.TOP_LEFT
         })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
