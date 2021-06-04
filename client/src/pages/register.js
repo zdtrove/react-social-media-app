@@ -98,7 +98,7 @@ const Register = () => {
 								<div className="form-field">
 									<div className="field">
 										<span className="fas fa-envelope"></span>
-										<Field maxLength="32" placeholder="Email" type="text" name="email" />
+										<Field maxLength="32" placeholder="Email" type="email" name="email" />
 										<small style={{ transform: 'translate(-5px, -2px)' }}>
 											{values.email && <span className={inputLengthClass(values.email.length, 20, 28)}>
 												{values.email.length}/32
