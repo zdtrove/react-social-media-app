@@ -27,6 +27,7 @@ const Login = () => {
 		email: Yup.string().email('Invalid email address')
 			.required('Email is required'),
 		password: Yup.string().required('Password is required')
+			.min(6, 'Min length password is 6')
 			.max(24, 'Max length password is 24'),
 	});
 
