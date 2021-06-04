@@ -1,6 +1,7 @@
 import { DeleteData, GLOBAL_TYPES } from '../actions/globalTypes'
 import { postDataAPI, getDataAPI, deleteDataAPI } from '../../utils/fetchData'
 import { ITEM_PER_PAGE } from '../../utils/config'
+import { toast } from 'react-toastify'
 
 export const MESSAGE_TYPES = {
 	ADD_USER: 'ADD_USER',
@@ -20,7 +21,10 @@ export const addMessage = ({ msg, auth, socket }) => async dispatch => {
 	try {
 		await postDataAPI('message', msg, auth.token)
 	} catch (err) {
-		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+		toast.error(err.response.data.msg, {
+			position: toast.POSITION.TOP_LEFT
+		})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
 	}
 }
 
@@ -40,7 +44,10 @@ export const getConversations = ({ auth, page = 1 }) => async dispatch => {
 			payload: { newArr, result: res.data.result }
 		})
 	} catch (err) {
-		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+		toast.error(err.response.data.msg, {
+			position: toast.POSITION.TOP_LEFT
+		})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
 	}
 }
 
@@ -50,7 +57,10 @@ export const getMessages = ({ auth, id, page = 1 }) => async dispatch => {
 		const newData = { ...res.data, messages: res.data.messages.reverse() }
 		dispatch({ type: MESSAGE_TYPES.GET_MESSAGES, payload: { ...newData, _id: id, page } })
 	} catch (err) {
-		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+		toast.error(err.response.data.msg, {
+			position: toast.POSITION.TOP_LEFT
+		})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
 	}
 }
 
@@ -60,7 +70,10 @@ export const loadMoreMessages = ({ auth, id, page = 1 }) => async dispatch => {
 		const newData = { ...res.data, messages: res.data.messages.reverse() }
 		dispatch({ type: MESSAGE_TYPES.UPDATE_MESSAGES, payload: { ...newData, _id: id, page } })
 	} catch (err) {
-		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+		toast.error(err.response.data.msg, {
+			position: toast.POSITION.TOP_LEFT
+		})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
 	}
 }
 
@@ -70,7 +83,10 @@ export const deleteMessages = ({ msg, data, auth }) => async dispatch => {
 	try {
 		await deleteDataAPI(`message/${msg._id}`, auth.token)
 	} catch (err) {
-		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+		toast.error(err.response.data.msg, {
+			position: toast.POSITION.TOP_LEFT
+		})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
 	}
 }
 
@@ -79,6 +95,9 @@ export const deleteConversation = ({ auth, id }) => async dispatch => {
 	try {
 		await deleteDataAPI(`conversation/${id}`, auth.token)
 	} catch (err) {
-		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+		toast.error(err.response.data.msg, {
+			position: toast.POSITION.TOP_LEFT
+		})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
 	}
 }

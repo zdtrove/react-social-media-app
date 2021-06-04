@@ -1,5 +1,6 @@
 import { deleteDataAPI, getDataAPI, patchDataAPI, postDataAPI } from "../../utils/fetchData"
 import { GLOBAL_TYPES } from "./globalTypes"
+import { toast } from 'react-toastify'
 
 export const NOTIFY_TYPES = {
     GET_NOTIFIES: 'GET_NOTIFIES',
@@ -21,7 +22,10 @@ export const createNotify = ({ msg, auth, socket }) => async dispatch => {
             }
         })
     } catch (err) {
-        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
+        })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -30,7 +34,10 @@ export const removeNotify = ({ msg, auth, socket }) => async dispatch => {
         await deleteDataAPI(`notify/${msg.id}?url=${msg.url}`, auth.token)
         socket.emit('removeNotify', msg)
     } catch (err) {
-        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
+        })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -39,7 +46,10 @@ export const getNotifies = token => async dispatch => {
         const res = await getDataAPI('notifies', token)
         dispatch({ type: NOTIFY_TYPES.GET_NOTIFIES, payload: res.data.notifies })
     } catch (err) {
-        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
+        })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -48,7 +58,10 @@ export const isReadNotify = ({ msg, auth }) => async dispatch => {
     try {
         await patchDataAPI(`/isReadNotify/${msg._id}`, null, auth.token)
     } catch (err) {
-        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
+        })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -57,6 +70,9 @@ export const deleteAllNotifies = token => async dispatch => {
     try {
         await deleteDataAPI('deleteAllNotifies', token)
     } catch (err) {
-        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
+        })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }

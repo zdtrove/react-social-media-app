@@ -2,6 +2,7 @@ import { getDataAPI, patchDataAPI } from '../../utils/fetchData'
 import { imageUpload } from '../../utils/imageUpload'
 import { GLOBAL_TYPES, DeleteData } from './globalTypes'
 import { createNotify, removeNotify } from '../../redux/actions/notifyAction'
+import { toast } from 'react-toastify'
 
 export const PROFILE_TYPES = {
 	LOADING_PROFILE: 'LOADING_PROFILE',
@@ -35,61 +36,53 @@ export const getProfileUsers = ({ id, auth }) => async dispatch => {
 
 		dispatch({ type: PROFILE_TYPES.LOADING_PROFILE, payload: false })
 	} catch (err) {
-		dispatch({
-			type: GLOBAL_TYPES.ALERT,
-			payload: { error: err.response.data.msg }
+		toast.error(err.response.data.msg, {
+			position: toast.POSITION.TOP_LEFT
 		})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
 	}
 }
 
 export const updateProfileUser = ({ userData, avatar, auth }) => async dispatch => {
+	if (!userData.fullname)
+		return dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: "Please add your full name" } })
+	if (userData.fullname.length > 25)
+		return dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: "Your full name too long" } })
+	if (userData.story.length > 200)
+		return dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: "Your story too long" } })
 	try {
-		if (!userData.fullname)
-			return dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: "Please add your full name" } })
-		if (userData.fullname.length > 25)
-			return dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: "Your full name too long" } })
-		if (userData.story.length > 200)
-			return dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: "Your story too long" } })
-		try {
-			let media
-			dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: true } })
+		let media
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: true } })
 
-			if (avatar) media = await imageUpload([avatar])
-			const res = await patchDataAPI("user", {
-				...userData,
-				avatar: avatar ? media[0].url : auth.user.avatar
-			}, auth.token)
+		if (avatar) media = await imageUpload([avatar])
+		const res = await patchDataAPI("user", {
+			...userData,
+			avatar: avatar ? media[0].url : auth.user.avatar
+		}, auth.token)
 
-			dispatch({
-				type: GLOBAL_TYPES.AUTH,
-				payload: {
-					...auth,
-					user: {
-						...auth.user,
-						...userData,
-						avatar: avatar ? media[0].url : auth.user.avatar,
-					}
-				}
-			})
-
-			dispatch({ type: GLOBAL_TYPES.ALERT, payload: { success: res.data.msg } })
-		} catch (err) {
-
-		}
-	} catch (err) {
 		dispatch({
-			type: GLOBAL_TYPES.ALERT,
-			payload: { error: err.response.data.msg }
+			type: GLOBAL_TYPES.AUTH,
+			payload: {
+				...auth,
+				user: {
+					...auth.user,
+					...userData,
+					avatar: avatar ? media[0].url : auth.user.avatar,
+				}
+			}
 		})
+
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { success: res.data.msg } })
+	} catch (err) {
+		toast.error(err.response.data.msg, {
+			position: toast.POSITION.TOP_LEFT
+		})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
 	}
+
 }
 
 export const follow = ({ users, user, auth, socket }) => async dispatch => {
-	// let newUser = {
-	// 	...user,
-	// 	followers: [...user.followers, auth.user]
-	// }
-
 	let newUser
 	if (users.every(item => item._id !== user._id)) {
 		newUser = { ...user, followers: [...user.followers, auth.user] }
@@ -128,19 +121,14 @@ export const follow = ({ users, user, auth, socket }) => async dispatch => {
 		}
 		dispatch(createNotify({ msg, auth, socket }))
 	} catch (err) {
-		dispatch({
-			type: GLOBAL_TYPES.ALERT,
-			payload: { error: err.response.data.msg }
+		toast.error(err.response.data.msg, {
+			position: toast.POSITION.TOP_LEFT
 		})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
 	}
 }
 
 export const unfollow = ({ users, user, auth, socket }) => async dispatch => {
-	// let newUser = {
-	// 	...user,
-	// 	followers: DeleteData(user.followers, auth.user._id)
-	// }
-
 	let newUser
 	if (users.every(item => item._id !== user._id)) {
 		newUser = { ...user, followers: DeleteData(user.followers, auth.user._id) }
@@ -179,9 +167,9 @@ export const unfollow = ({ users, user, auth, socket }) => async dispatch => {
 		}
 		dispatch(removeNotify({ msg, auth, socket }))
 	} catch (err) {
-		dispatch({
-			type: GLOBAL_TYPES.ALERT,
-			payload: { error: err.response.data.msg }
+		toast.error(err.response.data.msg, {
+			position: toast.POSITION.TOP_LEFT
 		})
+		dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
 	}
 }

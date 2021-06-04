@@ -1,6 +1,7 @@
 import { GLOBAL_TYPES } from './globalTypes'
 import { postDataAPI } from "../../utils/fetchData"
 import valid from '../../utils/valid'
+import { toast } from 'react-toastify'
 
 export const login = data => async dispatch => {
     try {
@@ -14,19 +15,15 @@ export const login = data => async dispatch => {
             }
         })
         localStorage.setItem("firstLogin", true)
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: {
-                success: res.data.msg
-            }
+        toast.success(res.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: {
-                error: err.response.data.msg
-            }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -45,12 +42,10 @@ export const refreshToken = () => async dispatch => {
             })
             dispatch({ type: GLOBAL_TYPES.ALERT, payload: {} })
         } catch (err) {
-            dispatch({
-                type: GLOBAL_TYPES.ALERT,
-                payload: {
-                    error: err.response.data.msg
-                }
+            toast.error(err.response.data.msg, {
+                position: toast.POSITION.TOP_LEFT
             })
+            dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: true } })
         }
     }
 }
@@ -71,19 +66,15 @@ export const register = data => async dispatch => {
             }
         })
         localStorage.setItem("firstLogin", true)
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: {
-                success: res.data.msg
-            }
+        toast.success(res.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: {
-                error: err.response.data.msg
-            }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -93,11 +84,9 @@ export const logout = () => async dispatch => {
         await postDataAPI('logout')
         window.location.href = "/"
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: {
-                error: err.response.data.msg
-            }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }

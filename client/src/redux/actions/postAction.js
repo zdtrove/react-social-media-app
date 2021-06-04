@@ -2,6 +2,7 @@ import { GLOBAL_TYPES } from "./globalTypes"
 import { imageUpload } from '../../utils/imageUpload'
 import { deleteDataAPI, getDataAPI, patchDataAPI, postDataAPI } from '../../utils/fetchData'
 import { createNotify, removeNotify } from "./notifyAction"
+import { toast } from 'react-toastify'
 
 export const POST_TYPES = {
     CREATE_POST: 'CREATE_POST',
@@ -35,10 +36,10 @@ export const createPost = ({ content, images, auth, socket }) => async dispatch 
         }
         dispatch(createNotify({ msg, auth, socket }))
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -52,10 +53,10 @@ export const getPosts = token => async dispatch => {
         })
         dispatch({ type: POST_TYPES.LOADING_POST, payload: false })
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -77,10 +78,10 @@ export const updatePost = ({ content, images, auth, status }) => async dispatch 
         dispatch({ type: POST_TYPES.UPDATE_POST, payload: res.data.newPost })
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: { success: res.data.msg } })
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -103,10 +104,10 @@ export const likePost = ({ post, auth, socket }) => async dispatch => {
         }
         dispatch(createNotify({ msg, auth, socket }))
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -127,10 +128,10 @@ export const unLikePost = ({ post, auth, socket }) => async dispatch => {
         }
         dispatch(removeNotify({ msg, auth, socket }))
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -140,10 +141,10 @@ export const getPost = ({ detailPost, id, auth }) => async dispatch => {
             const res = await getDataAPI(`post/${id}`, auth.token)
             dispatch({ type: POST_TYPES.GET_POST, payload: res.data.post })
         } catch (err) {
-            dispatch({
-                type: GLOBAL_TYPES.ALERT,
-                payload: { error: err.response.data.msg }
+            toast.error(err.response.data.msg, {
+                position: toast.POSITION.TOP_LEFT
             })
+            dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
         }
     }
 }
@@ -161,10 +162,10 @@ export const deletePost = ({ post, auth, socket }) => async dispatch => {
         }
         dispatch(removeNotify({ msg, auth, socket }))
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -174,10 +175,10 @@ export const savedPost = ({ post, auth }) => async dispatch => {
     try {
         await patchDataAPI(`savedPost/${post._id}`, null, auth.token)
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -187,9 +188,9 @@ export const unSavedPost = ({ post, auth }) => async dispatch => {
     try {
         await patchDataAPI(`unSavedPost/${post._id}`, null, auth.token)
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }

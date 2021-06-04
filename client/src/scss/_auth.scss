@@ -1,4 +1,10 @@
 .auth-page {
+  .login {
+    min-height: 600px;
+  }
+  .register {
+    min-height: 750px;
+  }
   .bg-img {
     background: url("/images/bg-login.jpeg");
     height: 100vh;
@@ -7,7 +13,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 750px;
+    &.register {
+      .content {
+        .image-login {
+          &:after {
+            background: url("/images/register.png") no-repeat center / cover;
+          }
+        }
+      }
+    }
     .content {
       z-index: 1;
       text-align: center;
@@ -36,81 +50,80 @@
           cursor: pointer;
         }
       }
-      .field {
-        position: relative;
-        height: 45px;
-        width: 100%;
-        display: flex;
-        border: 1px solid #fff;
-        border-radius: 5px;
-        margin-bottom: 20px;
-        span {
-          color: #222;
-          width: 40px;
-          line-height: 45px;
-        }
-        input {
-          height: 100%;
-          width: 230px;
-          background: transparent;
-          border: none;
-          outline: none;
-          color: white;
-          font-size: 16px;
-          font-family: "Poppins", sans-serif;
-          border-top-right-radius: 5px;
-          border-bottom-right-radius: 5px;
-          padding: 5px;
-          padding-left: 0;
-          &::-webkit-input-placeholder {
-            color: rgb(99, 84, 84);
-            font-size: 12px;
-          }
-        }
-        input[type="submit"] {
+      .form-field {
+        .field {
+          position: relative;
+          height: 45px;
           width: 100%;
-          color: white;
-          font-size: 18px;
-          letter-spacing: 1px;
-          font-weight: 600;
-          cursor: pointer;
-          font-family: "Montserrat", sans-serif;
-          transition: all 0.5s;
+          display: flex;
+          border: 1px solid #fff;
           border-radius: 5px;
-          &:hover {
-            background: #a164b5;
+          span {
+            color: #222;
+            width: 40px;
+            line-height: 45px;
+          }
+          input {
+            height: 100%;
+            width: 230px;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 16px;
+            font-family: "Poppins", sans-serif;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            padding: 5px;
+            padding-left: 0;
+            padding-right: 10px;
+            &::-webkit-input-placeholder {
+              color: rgb(99, 84, 84);
+              font-size: 12px;
+            }
+          }
+          input[type="submit"] {
+            width: 100%;
+            color: white;
+            font-size: 18px;
+            letter-spacing: 1px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: "Montserrat", sans-serif;
+            transition: all 0.5s;
+            border-radius: 5px;
+            &:hover {
+              background: #be8898;
+            }
+          }
+          .show {
+            position: absolute;
+            right: 5px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #222;
+            display: none;
+            cursor: pointer;
+            font-family: "Montserrat", sans-serif;
+          }
+          .pass-key:valid ~ .show {
+            display: block;
+          }
+          .submit {
+            background: transparent;
           }
         }
-        .show {
-          position: absolute;
-          right: 5px;
-          font-size: 10px;
-          font-weight: 700;
-          color: #222;
-          display: none;
-          cursor: pointer;
-          font-family: "Montserrat", sans-serif;
-        }
-        .pass-key:valid ~ .show {
-          display: block;
-        }
-        .submit {
-          background: transparent;
+        .wrap-error {
+          height: 25px;
         }
       }
       .radio {
-        span, input {
+        span,
+        input {
           cursor: pointer;
         }
         input {
           transform: translateY(2px);
-        }
-      }
-      &.register {
-        .image-login {
-          &:after {
-            background: url("/images/register.png") no-repeat center / cover;
-          }
         }
       }
     }
@@ -196,6 +209,7 @@ input:-webkit-autofill:active {
     .bg-img {
       .content {
         padding: 30px 10px;
+        padding-top: 70px;
         .field {
           input {
             width: 180px;

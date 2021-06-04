@@ -18,6 +18,8 @@ import SocketClient from './SocketClient'
 import { getNotifies } from './redux/actions/notifyAction'
 import CallModal from './components/message/CallModal'
 import Peer from 'peerjs'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   const { auth, status, modal, call } = useSelector(state => state)
@@ -61,6 +63,7 @@ function App() {
   return (
     <Router>
       <Alert />
+      <ToastContainer />
       <input type="checkbox" id="theme" />
       <div className={`App ${(status || modal) && 'mode'}`}>
         <div className="main">

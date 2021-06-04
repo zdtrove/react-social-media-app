@@ -2,6 +2,7 @@ import { patchDataAPI, postDataAPI, deleteDataAPI } from '../../utils/fetchData'
 import { EditData, DeleteData, GLOBAL_TYPES } from './globalTypes'
 import { createNotify, removeNotify } from './notifyAction'
 import { POST_TYPES } from './postAction'
+import { toast } from 'react-toastify'
 
 export const createComment = (post, newComment, auth, socket) => async dispatch => {
     const newPost = { ...post, comments: [...post.comments, newComment] }
@@ -28,7 +29,10 @@ export const createComment = (post, newComment, auth, socket) => async dispatch 
         }
         dispatch(createNotify({ msg, auth, socket }))
     } catch (err) {
-        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { error: err.response.data.msg } })
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
+        })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -39,10 +43,10 @@ export const updateComment = ({ comment, post, content, auth }) => async dispatc
     try {
         await patchDataAPI(`comment/${comment._id}`, { content }, auth.token)
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -55,10 +59,10 @@ export const likeComment = ({ comment, post, auth }) => async dispatch => {
     try {
         await patchDataAPI(`comment/${comment._id}/like`, null, auth.token)
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -71,10 +75,10 @@ export const unLikeComment = ({ comment, post, auth }) => async dispatch => {
     try {
         await patchDataAPI(`comment/${comment._id}/unlike`, null, auth.token)
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
 
@@ -99,9 +103,9 @@ export const deleteComment = ({ post, comment, auth, socket }) => async dispatch
             dispatch(removeNotify({ msg, auth, socket }))
         })
     } catch (err) {
-        dispatch({
-            type: GLOBAL_TYPES.ALERT,
-            payload: { error: err.response.data.msg }
+        toast.error(err.response.data.msg, {
+            position: toast.POSITION.TOP_LEFT
         })
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: { loading: false } })
     }
 }
