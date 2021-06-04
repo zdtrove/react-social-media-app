@@ -68,7 +68,7 @@ const Register = () => {
 										<span className="fas fa-file-signature"></span>
 										<Field maxLength="24" placeholder="Name" type="text" name="fullname" />
 										<small style={{ transform: 'translate(-5px, -2px)' }}>
-											{values.fullname && <span className={inputLengthClass(values.fullname.length, 12, 20)}>
+											{values.fullname && <span className={inputLengthClass(values.fullname.length, 16, 6, 20)}>
 												{values.fullname.length}/24
 											</span>}
 										</small>
@@ -84,7 +84,7 @@ const Register = () => {
 										<span className="fas fa-file-signature"></span>
 										<Field maxLength="16" placeholder="Username" type="text" name="username" />
 										<small style={{ transform: 'translate(-5px, -2px)' }}>
-											{values.username && <span className={inputLengthClass(values.username.length, 9, 13)}>
+											{values.username && <span className={inputLengthClass(values.username.length, 10, 6, 13)}>
 												{values.username.length}/16
 											</span>}
 										</small>
@@ -100,7 +100,7 @@ const Register = () => {
 										<span className="fas fa-envelope"></span>
 										<Field maxLength="32" placeholder="Email" type="email" name="email" />
 										<small style={{ transform: 'translate(-5px, -2px)' }}>
-											{values.email && <span className={inputLengthClass(values.email.length, 20, 28)}>
+											{values.email && <span className={inputLengthClass(values.email.length, 20, null, 28)}>
 												{values.email.length}/32
 											</span>}
 										</small>

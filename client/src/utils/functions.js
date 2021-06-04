@@ -1,3 +1,4 @@
-export const inputLengthClass = (length, success, warning) => {
-	return length <= success ? 'text-success' : length <= warning ? 'text-warning' : 'text-danger'
+export const inputLengthClass = (length, success, warningSmall = null, warningBig) => {
+	if (warningSmall) return (length < warningSmall || length > warningBig) ? 'text-danger' : length <= success ? 'text-success' : 'text-warning'
+	return length <= success ? 'text-success' : length <= warningBig ? 'text-warning' : 'text-danger'
 }
