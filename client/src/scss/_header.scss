@@ -16,6 +16,8 @@
     .menu {
       li {
         opacity: 0.5;
+        width: 65px;
+        transition: all .5s;
         &.active {
           opacity: 1;
         }
@@ -35,6 +37,8 @@
         cursor: pointer;
       }
       .notify-img {
+        padding-left: .5rem;
+        padding-right: .5rem;
         img {
           opacity: 0.5;
           &:hover {
@@ -52,9 +56,8 @@
       }
       .notify-length {
         position: absolute;
-        top: 45%;
-        left: 50%;
-        transform: translate(10%, -75%);
+        top: 4px;
+        left: 20px;
         color: white;
         font-weight: bold;
         font-size: 11px;

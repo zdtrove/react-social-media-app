@@ -63,10 +63,10 @@ function App() {
   return (
     <Router>
       <Alert />
-      <ToastContainer />
       <input type="checkbox" id="theme" />
       <div className={`App ${(status || modal) && 'mode'}`}>
         <div className="main">
+          <ToastContainer />
           {auth.token && <Header />}
           {status && <StatusModal />}
           {auth.token && <SocketClient />}
